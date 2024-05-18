@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Establecer el estilo del botón -->
+        <item name="android:buttonStyle">@style/MyButtonStyle</item>
+        <!-- Establecer el estilo del scrollbar vertical -->
+        <item name="android:scrollbarThumbVertical">@drawable/custom_scrollbar_thumb</item>
+        <item name="android:scrollbarTrackVertical">@drawable/custom_scrollbar_track</item>
+    </style>
+
+    <!-- Definir el estilo del botón personalizado -->
+    <style name="MyButtonStyle" parent="Widget.AppCompat.Button">
+        <!-- Personalizar el color del fondo -->
+        <item name="android:background">@drawable/custom_button_background</item>
+        <!-- Personalizar el color del texto -->
+        <item name="android:textColor">#FFFFFF</item>
+        <!-- Personalizar el padding -->
+        <item name="android:padding">16dp</item>
+        <!-- Personalizar el margen -->
+        <item name="android:layout_margin">8dp</item>
+        <!-- Personalizar el radio de los bordes -->
+        <item name="android:radius">8dp</item>
+    </style>
+
+</resources>
+

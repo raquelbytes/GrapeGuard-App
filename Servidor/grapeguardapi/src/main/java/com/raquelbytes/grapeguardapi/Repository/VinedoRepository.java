@@ -13,14 +13,8 @@ import java.util.List;
 @Repository
 public interface VinedoRepository extends JpaRepository<Vinedo, Integer> {
 
-    List<Vinedo> findByUsuarioId(Usuario usuarioId);
-
-
-    Vinedo  findByUsuarioIdAndNombre(Usuario usuarioId,String nombre);
-
-
-    Vinedo  findByIdAndUsuarioId(Usuario usuarioId,Integer id);
-
+    List<Vinedo> findByUsuario(Usuario usuario);
+    boolean existsByUbicacion(String ubicacion);
 
     @Query("SELECT SUM(v.hectareas) FROM Vinedo v WHERE v.usuario = :usuario")
     BigDecimal sumHectareasByUsuarioId(@Param("usuario") Usuario usuario);

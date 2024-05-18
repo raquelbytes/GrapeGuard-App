@@ -2,11 +2,14 @@ package com.raquelbytes.grapeguardapi.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@Data
 @Table(name = "Vinedo")
 public class Vinedo {
     @Id
@@ -40,54 +43,6 @@ public class Vinedo {
     @OneToMany(mappedBy = "vinedo")
     private List<Tarea> tareas;
 
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getUbicacion() {
-        return ubicacion;
-    }
-
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
-    }
-
-    public LocalDate getFechaPlantacion() {
-        return fechaPlantacion;
-    }
-
-    public void setFechaPlantacion(LocalDate fechaPlantacion) {
-        this.fechaPlantacion = fechaPlantacion;
-    }
-
-    public BigDecimal getHectareas() {
-        return hectareas;
-    }
-
-    public void setHectareas(BigDecimal hectareas) {
-        this.hectareas = hectareas;
-    }
 
 
 }

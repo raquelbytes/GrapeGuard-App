@@ -4,6 +4,7 @@ import com.raquelbytes.grapeguardapi.Model.Tarea;
 import com.raquelbytes.grapeguardapi.Model.Vinedo;
 import com.raquelbytes.grapeguardapi.Repository.TareaRepository;
 import com.raquelbytes.grapeguardapi.Repository.VinedoRepository;
+import com.raquelbytes.grapeguardapi.ApiMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tarea")
+@RequestMapping(ApiMap.TAREA_BASE)
 public class TareaController {
 
     @Autowired
@@ -20,9 +21,8 @@ public class TareaController {
     @Autowired
     private VinedoRepository vinedoRepository;
 
-
     // Obtener tareas por viñedo
-    @GetMapping("/vinedo/{idVinedo}")
+    @GetMapping(ApiMap.TAREA_POR_VINEDO_ID)
     public ResponseEntity<List<Tarea>> obtenerTareasPorVinedo(@PathVariable Integer idVinedo) {
         List<Tarea> tareas = tareaRepository.findByVinedoId(idVinedo);
         if (!tareas.isEmpty()) {
@@ -33,7 +33,7 @@ public class TareaController {
     }
 
     // Consultar tareas por viñedo con estado pendiente y en progreso
-    @GetMapping("/vinedo/{idVinedo}/pendientes")
+    @GetMapping(ApiMap.TAREA_PENDIENTES_POR_VINEDO_ID)
     public ResponseEntity<List<Tarea>> consultarTareasPendientesPorVinedo(@PathVariable Integer idVinedo) {
         List<Tarea> tareasPendientes = tareaRepository.findByVinedoIdAndEstadoIn(idVinedo, "Pendiente", "EnProgreso");
         if (!tareasPendientes.isEmpty()) {
@@ -42,8 +42,9 @@ public class TareaController {
             return ResponseEntity.notFound().build();
         }
     }
+
     // Consultar tareas por viñedo terminadas
-    @GetMapping("/vinedo/{idVinedo}/terminadas")
+    @GetMapping(ApiMap.TAREA_TERMINADAS_POR_VINEDO_ID)
     public ResponseEntity<List<Tarea>> consultarTareasTerminadasPorVinedo(@PathVariable Integer idVinedo) {
         List<Tarea> tareasTerminadas = tareaRepository.findByVinedoIdAndEstado(idVinedo, Tarea.EstadoTarea.Completada);
         if (!tareasTerminadas.isEmpty()) {
@@ -54,7 +55,7 @@ public class TareaController {
     }
 
     // Añadir tarea al viñedo
-    @PostMapping("/vinedo/{idVinedo}")
+    @PostMapping(ApiMap.TAREA_AGREGAR_POR_VINEDO_ID)
     public ResponseEntity<String> agregarTareaAlVinedo(@PathVariable Integer idVinedo, @RequestBody Tarea nuevaTarea) {
         Vinedo vinedo = vinedoRepository.findById(idVinedo)
                 .orElseThrow(() -> new RuntimeException("Viñedo no encontrado con ID: " + idVinedo));
@@ -65,9 +66,8 @@ public class TareaController {
         return ResponseEntity.ok("Tarea añadida al viñedo correctamente");
     }
 
-
     // Borrar tarea del viñedo
-    @DeleteMapping("/{id}")
+    @DeleteMapping(ApiMap.TAREA_ELIMINAR_POR_ID)
     public ResponseEntity<String> borrarTareaDelVinedo(@PathVariable Integer id) {
         if (tareaRepository.existsById(id)) {
             tareaRepository.deleteById(id);
@@ -76,30 +76,4 @@ public class TareaController {
             return ResponseEntity.notFound().build();
         }
     }
-
-
-    /*// Modificar tarea
-    @PutMapping("/{id}")
-    public ResponseEntity<String> modificarTarea(@PathVariable Integer id, @RequestBody Tarea tareaModificada) {
-        // Verificar si la tarea existe
-        if (tareaRepository.existsById(id)) {
-
-            Tarea tareaOriginal = tareaRepository.findById(id).orElseThrow(() -> new RuntimeException("Tarea no encontrada con ID: " + id));
-
-
-            tareaModificada.setVinedo(tareaOriginal.getVinedo());
-
-            tareaModificada.setId(id);
-
-
-            tareaRepository.save(tareaModificada);
-
-            return ResponseEntity.ok("Tarea modificada correctamente");
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    } */
-
-
-
 }

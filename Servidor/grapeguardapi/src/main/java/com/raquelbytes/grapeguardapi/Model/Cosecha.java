@@ -2,10 +2,13 @@ package com.raquelbytes.grapeguardapi.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
+@Data
 @Table(name = "Cosecha")
 public class Cosecha {
     @Id
@@ -31,51 +34,4 @@ public class Cosecha {
     private LocalDate fechaCosecha;
 
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Vinedo getVinedo() {
-        return vinedo;
-    }
-
-    public void setVinedo(Vinedo vinedo) {
-        this.vinedo = vinedo;
-    }
-
-    public String getNombreVariedad() {
-        return nombreVariedad;
-    }
-
-    public void setNombreVariedad(String nombreVariedad) {
-        this.nombreVariedad = nombreVariedad;
-    }
-
-    public BigDecimal getCantidadUvas() {
-        return cantidadUvas;
-    }
-
-    public void setCantidadUvas(BigDecimal cantidadUvas) {
-        this.cantidadUvas = cantidadUvas;
-    }
-
-    public BigDecimal getPrecioVentaKg() {
-        return precioVentaKg;
-    }
-
-    public void setPrecioVentaKg(BigDecimal precioVentaKg) {
-        this.precioVentaKg = precioVentaKg;
-    }
-
-    public LocalDate getFechaCosecha() {
-        return fechaCosecha;
-    }
-
-    public void setFechaCosecha(LocalDate fechaCosecha) {
-        this.fechaCosecha = fechaCosecha;
-    }
 }

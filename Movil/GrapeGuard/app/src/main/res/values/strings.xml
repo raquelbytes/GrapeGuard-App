@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">GrapeGuard</string>
     <string name="title_activity_login">Login</string>
-</resources>
+        <string-array name="estado_tarea_array">
+            <item>Pendiente</item>
+            <item>EnProgreso</item>
+            <item>Completada</item>
+        </string-array>
+    </resources>
+

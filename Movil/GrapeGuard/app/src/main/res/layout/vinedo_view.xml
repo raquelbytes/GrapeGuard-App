@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:theme="@style/AppTheme"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00DBE3D4">
+
+        <!-- Barra verde con título -->
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#8BD767"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/menu_icon"
+                android:layout_width="64dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GrapeGuard"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!-- Vista de cada viñedo -->
+        <LinearLayout
+            android:id="@+id/vineyardContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/vineyardNameTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nombre del Viñedo"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/locationTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Ubicación del Viñedo"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <!-- TableLayout para la tabla -->
+        <TableLayout
+            android:id="@+id/tableLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/vineyardContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="16dp"
+            android:background="@drawable/panel_background">
+
+            <!-- Encabezado de la tabla -->
+            <TableRow>
+
+                <!-- Vista de Variedad -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Variedad"
+                    android:textStyle="bold"
+                    android:textAlignment="center"/>
+
+                <!-- Vista de Cantidad -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cantidad"
+                    android:textStyle="bold"
+                    android:textAlignment="center"/>
+
+                <!-- Vista de Precio/Kg -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Precio/Kg"
+                    android:textStyle="bold"
+                    android:textAlignment="center"/>
+
+                <!-- Vista de Fecha de Cosecha -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Fecha Cosecha"
+                    android:textStyle="bold"
+                    android:textAlignment="center"/>
+            </TableRow>
+        </TableLayout>
+
+        <!-- ListView para las tareas -->
+
+        <!-- Botones para añadir tarea y añadir cosecha -->
+        <ListView
+            android:id="@+id/list_view_tasks"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="16dp"
+        android:background="@drawable/panel_background"
+        android:elevation="4dp"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+        app:layout_constraintBottom_toTopOf="@+id/buttons_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+        <LinearLayout
+            android:id="@+id/buttons_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="16dp">
+
+            <!-- Botón para añadir tarea -->
+            <Button
+                android:id="@+id/add_task_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:backgroundTint="#8AD667"
+                android:text="Añadir Tarea"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                app:cornerRadius="100dp" />
+
+            <!-- Botón para añadir cosecha -->
+            <Button
+                android:id="@+id/add_harvest_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:backgroundTint="#8AD667"
+                android:text="Añadir Cosecha"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                app:cornerRadius="100dp" />
+        </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

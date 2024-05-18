@@ -2,9 +2,12 @@ package com.raquelbytes.grapeguardapi.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
 @Entity
+@Data
 @Table(name = "Nota")
 public class Nota {
     @Id
@@ -34,43 +37,4 @@ public class Nota {
         Baja
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Vinedo getVinedo() {
-        return vinedo;
-    }
-
-    public void setVinedo(Vinedo vinedo) {
-        this.vinedo = vinedo;
-    }
-
-    public String getNota() {
-        return nota;
-    }
-
-    public void setNota(String nota) {
-        this.nota = nota;
-    }
-
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
-    public PrioridadNota getPrioridad() {
-        return prioridad;
-    }
-
-    public void setPrioridad(PrioridadNota prioridad) {
-        this.prioridad = prioridad;
-    }
 }
