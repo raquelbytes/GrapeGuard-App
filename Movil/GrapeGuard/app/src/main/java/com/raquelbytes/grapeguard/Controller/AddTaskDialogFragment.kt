@@ -15,7 +15,7 @@ import com.raquelbytes.grapeguard.R
 
 class AddTaskDialogFragment : DialogFragment() {
 
-    interface AddTaskDialogListener {
+  /*  interface AddTaskDialogListener {
         fun onTaskAdded(tarea: Tarea)
     }
 
@@ -52,5 +52,5 @@ class AddTaskDialogFragment : DialogFragment() {
         return view
     }
 
-
+*/
 }

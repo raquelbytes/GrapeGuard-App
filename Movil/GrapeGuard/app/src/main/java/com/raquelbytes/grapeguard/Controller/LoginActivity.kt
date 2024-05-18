@@ -46,7 +46,7 @@ class LoginActivity : AppCompatActivity(), UserLoginCallback {
     private val someActivityResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        // Aquí puedes manejar el resultado de la actividad si es necesario
+
     }
 
     override fun onLoginSuccess(usuario: Usuario) {
@@ -65,10 +65,10 @@ class LoginActivity : AppCompatActivity(), UserLoginCallback {
             Log.d("ERROR", ex.message ?: "")
         }
 
-        // NOTIFICAR AL USUARIO DE LA BIENVENIDA
+
         Toast.makeText(this, "¡Bienvenido a GrapeGuard!", Toast.LENGTH_LONG).show()
 
-        // PASAR A LA PANTALLA DE MESAS
+        // PASAR A LA PANTALLA  MAIN
         val intentMainActivity = Intent(applicationContext, MainActivity::class.java)
         intentMainActivity.putExtra("id_usuario", usuario.id_usuario)
         someActivityResultLauncher.launch(intentMainActivity)

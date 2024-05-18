@@ -129,7 +129,7 @@ class VinedoActivity : AppCompatActivity() {
 
                                 override fun onError(errorMessage: String) {
                                         Log.e("Tareas Error", errorMessage)
-                                        // Manejar el error, por ejemplo, mostrando un mensaje al usuario
+
                                 }
                         })
 
@@ -138,7 +138,7 @@ class VinedoActivity : AppCompatActivity() {
         }
 
         fun borrarTarea(idTarea: Int) {
-                // Mostrar un diálogo de confirmación antes de borrar la tarea
+
                 mostrarDialogoConfirmacion(idTarea)
         }
 
@@ -159,7 +159,7 @@ class VinedoActivity : AppCompatActivity() {
                                 }
 
                                 override fun onError(errorMessage: String) {
-                                        // Manejar errores
+
                                         Log.e("Error al borrar tarea", errorMessage)
                                 }
                         })
@@ -197,7 +197,7 @@ class VinedoActivity : AppCompatActivity() {
 
                                         override fun onError(errorMessage: String) {
                                                 Log.e("Tareas Error", errorMessage)
-                                                // Manejar el error, por ejemplo, mostrando un mensaje al usuario
+
                                         }
                                 })
                 }
