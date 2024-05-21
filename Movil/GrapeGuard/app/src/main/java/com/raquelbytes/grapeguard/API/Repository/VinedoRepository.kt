@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets
 class VinedoRepository {
     companion object {
         fun obtenerVinedosPorUsuario(context: Context, usuarioId: Int, callBack: VinedosCallback) {
-            val url = "http://192.168.1.132:8080/vinedo/usuario/$usuarioId"
+            val url = "http://192.168.1.141:8080/vinedo/usuario/$usuarioId"
 
             val utf8StringRequest = object : StringRequest(Method.GET, url,
                 Response.Listener { response ->
@@ -46,13 +46,13 @@ class VinedoRepository {
         }
 
         fun obtenerVinedoPorId(context: Context, vinedoId: Int, callBack: VinedoCallback) {
-            val url = "http://192.168.1.132:8080/vinedo/$vinedoId"
+            val url = "http://192.168.1.141:8080/vinedo/$vinedoId"
             val stringRequest = StringRequest(Request.Method.GET, url,
                 { response ->
                     Log.d("Vinedo Response", response)
                     val gson = Gson()
                     val vinedo = gson.fromJson(response, Vinedo::class.java)
-                    callBack.onVinedoObtenido(vinedo)
+                   // callBack.onVinedoObtenido(vinedo)
                 },
                 { error ->
                     Log.e("Vinedo Error", "Error en la solicitud: ${error.toString()}")
@@ -63,8 +63,8 @@ class VinedoRepository {
             queue.add(stringRequest)
         }
 
-        fun agregarNuevoVinedo(context: Context, vinedo: Vinedo, callback: VinedoCallback) {
-            val url = "http://192.168.1.132:8080/vinedo/usuario/${vinedo.usuarioId}/nuevo"
+        fun agregarNuevoVinedo(context: Context, usuarioId: Int, vinedo: Vinedo, callback: VinedoCallback) {
+            val url = "http://192.168.1.141:8080/vinedo/usuario/${usuarioId}/nuevo"
             val stringRequest = object : StringRequest(Request.Method.POST, url,
                 Response.Listener { response -> callback.onVinedoAgregado(response) },
                 Response.ErrorListener { error ->
@@ -91,10 +91,10 @@ class VinedoRepository {
             val queue = Volley.newRequestQueue(context)
             queue.add(stringRequest)
         }
-        fun modificarVinedo(context: Context, vinedo: Vinedo, callback: VinedoCallback) {
-            val url = "http://192.168.1.132:8080/vinedo/${vinedo.id}"
+        /*fun modificarVinedo(context: Context, vinedo: Vinedo, callback: VinedoCallback) {
+            val url = "http://192.168.1.141:8080/vinedo/${vinedo.id}"
             val stringRequest = object : StringRequest(Request.Method.PUT, url,
-                Response.Listener { response -> callback.onVinedoModificado(response) },
+                // Response.Listener { response -> callback.onVinedoModificado(response) },
                 Response.ErrorListener { error ->
                     var errorMessage = "Error desconocido"
                     if (error.networkResponse != null && error.networkResponse.data != null) {
@@ -118,10 +118,10 @@ class VinedoRepository {
 
             val queue = Volley.newRequestQueue(context)
             queue.add(stringRequest)
-        }
+        } */
 
-        fun borrarVinedo(context: Context, vinedoId: Int, callback: VinedoCallback) {
-            val url = "http://192.168.1.132:8080/vinedo/$vinedoId"
+       /* fun borrarVinedo(context: Context, vinedoId: Int, callback: VinedoCallback) {
+            val url = "http://192.168.1.141:8080/vinedo/$vinedoId"
             val stringRequest = StringRequest(Request.Method.DELETE, url,
                 { response -> callback.onVinedoBorrado(response) },
                 { error ->
@@ -137,7 +137,7 @@ class VinedoRepository {
         }
 
         fun obtenerSumHectareasPorUsuario(context: Context, usuarioId: Int, callback: VinedoCallback) {
-            val url = "http://192.168.1.132:8080/vinedo/sum-hectareas/$usuarioId"
+            val url = "http://192.168.1.141:8080/vinedo/sum-hectareas/$usuarioId"
             val stringRequest = StringRequest(Request.Method.GET, url,
                 { response ->
                     Log.d("Suma Hectareas Response", response)
@@ -155,7 +155,7 @@ class VinedoRepository {
 
             val queue: RequestQueue = Volley.newRequestQueue(context)
             queue.add(stringRequest)
-        }
+        } */
 
 
     }

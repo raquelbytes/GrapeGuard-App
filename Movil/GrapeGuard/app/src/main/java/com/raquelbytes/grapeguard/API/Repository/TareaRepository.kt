@@ -19,6 +19,7 @@ import com.raquelbytes.grapeguard.API.Interface.TareaCallback
 import com.raquelbytes.grapeguard.API.Model.Tarea
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.Result.Companion.success
@@ -27,7 +28,7 @@ class TareaRepository {
     companion object {
 
         fun obtenerTareasPorVinedo(context: Context, idVinedo: Int, callback: TareaCallback) {
-            val url = "http://192.168.1.132:8080/tarea/vinedo/$idVinedo"
+            val url = "http://192.168.1.141:8080/tarea/vinedo/$idVinedo"
             val stringRequest = object : StringRequest(
                 Request.Method.GET, url,
                 { response ->
@@ -36,16 +37,32 @@ class TareaRepository {
                         val tareas: List<Tarea> = gson.fromJson(response, object : TypeToken<List<Tarea>>() {}.type)
 
                         for (tarea in tareas) {
-                            // Formatear la fecha del recordatorio si no es nula
+                            // Formatear el recordatorio si no es nulo
                             tarea.recordatorio?.let { recordatorio ->
-                                val recordatorioDate = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(recordatorio)
+                                val formatoRecordatorio = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+                                val recordatorioDate = try {
+                                    formatoRecordatorio.parse(recordatorio)
+                                } catch (ex: ParseException) {
+                                    // Si el recordatorio no está en el formato esperado, intenta analizarlo en otro formato
+                                    val otroFormato = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                                    otroFormato.parse(recordatorio)
+                                }
+
                                 val formattedRecordatorio = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault()).format(recordatorioDate)
                                 tarea.recordatorio = formattedRecordatorio
                             }
 
-                            // Formatear la fecha de realización si no es nula
+// Formatear la fecha de realización si no es nula
                             tarea.fechaRealizacion?.let { fechaRealizacion ->
-                                val fechaRealizacionDate = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(fechaRealizacion)
+                                val formatoFechaRealizacion = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+                                val fechaRealizacionDate = try {
+                                    formatoFechaRealizacion.parse(fechaRealizacion)
+                                } catch (ex: ParseException) {
+                                    // Si la fecha de realización no está en el formato esperado, intenta analizarla en otro formato
+                                    val otroFormato = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                                    otroFormato.parse(fechaRealizacion)
+                                }
+
                                 val formattedFechaRealizacion = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault()).format(fechaRealizacionDate)
                                 tarea.fechaRealizacion = formattedFechaRealizacion
                             }

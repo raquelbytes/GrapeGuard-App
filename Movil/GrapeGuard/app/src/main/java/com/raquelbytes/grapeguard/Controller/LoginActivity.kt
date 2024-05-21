@@ -13,9 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.raquelbytes.grapeguard.API.Interface.UserLoginCallback
 import com.raquelbytes.grapeguard.API.Model.Usuario
 import com.raquelbytes.grapeguard.API.Repository.UsuarioRepository
-import com.raquelbytes.grapeguard.Controller.MainActivity
 import com.raquelbytes.grapeguard.R
-import com.raquelbytes.grapeguard.Util.EncryptionUtil
+
 
 class LoginActivity : AppCompatActivity(), UserLoginCallback {
 
@@ -56,7 +55,7 @@ class LoginActivity : AppCompatActivity(), UserLoginCallback {
                 val editor = sharedPreferences.edit()
                 val usuarioEncriptado = EncryptionUtil.encriptar(
                     EncryptionUtil.transformarUsuarioToJson(usuario),
-                    "admintest123"
+                    "ejemploadmin123"
                 )
                 editor.putString("Usuario", usuarioEncriptado)
                 editor.apply()

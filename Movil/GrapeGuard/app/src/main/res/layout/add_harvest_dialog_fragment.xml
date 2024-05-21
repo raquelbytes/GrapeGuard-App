@@ -3,43 +3,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:theme="@style/AppTheme"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:theme="@style/AppTheme">
 
     <EditText
-        android:id="@+id/tareaEditText"
+        android:id="@+id/fechaCosechaEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Tarea"
-        android:inputType="text" />
-
-    <Spinner
-        android:id="@+id/estadoSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:entries="@array/estado_tarea_array" />
-
-
-    <EditText
-        android:id="@+id/recordatorioEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Seleccionar Recordatorio"
+        android:hint="Fecha de Cosecha"
         android:focusable="false" />
 
     <EditText
-        android:id="@+id/fechaRealizacionEditText"
+        android:id="@+id/cantidadUvasEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Seleccionar Fecha de Realización"
-        android:focusable="false" />
+        android:hint="Cantidad de Uvas (kg)"
+        android:inputType="numberDecimal" />
 
-    <TextView
-        android:id="@+id/fechaRealizacionTextView"
+    <EditText
+        android:id="@+id/precioVentaKgEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Fecha de Realización"
-        android:visibility="gone"/>
+        android:hint="Precio de Venta por Kg"
+        android:inputType="numberDecimal" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -58,7 +44,7 @@
             android:id="@+id/addButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Añadir"
+            android:text="Agregar"
             android:layout_marginStart="8dp" />
     </LinearLayout>
 

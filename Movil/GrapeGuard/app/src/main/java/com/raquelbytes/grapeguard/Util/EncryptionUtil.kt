@@ -1,14 +1,10 @@
-package com.raquelbytes.grapeguard.Util
-
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
 import com.google.gson.Gson
 import com.raquelbytes.grapeguard.API.Model.Usuario
-import java.security.SecureRandom
-import java.security.spec.KeySpec
 import javax.crypto.Cipher
-import javax.crypto.SecretKey
+
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
@@ -20,7 +16,7 @@ object EncryptionUtil {
         return gson.toJson(usuario)
     }
 
-    fun transformarJsonToUsuario(jsonUsuario: String): Usuario {
+    fun transformarJsonToUsuaro(jsonUsuario: String): Usuario {
         return gson.fromJson(jsonUsuario, Usuario::class.java)
     }
 
@@ -42,28 +38,19 @@ object EncryptionUtil {
         return String(decrypted)
     }
 
-
     @Throws(Exception::class)
     private fun keyAesDerivada(password: String): SecretKeySpec {
-        val salt = generarSalt()
+        val salt = byteArrayOf(0xa7.toByte(), 0x21.toByte(), 0x2b.toByte(), 0xc2.toByte(), 0x56.toByte(), 0xee.toByte(), 0x77.toByte(), 0x99.toByte())
         val iterations = 65536
-        val spec: KeySpec = PBEKeySpec(password.toCharArray(), salt, iterations, 256)
+        val spec = PBEKeySpec(password.toCharArray(), salt, iterations, 256)
         val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
-        val secretKey: SecretKey = factory.generateSecret(spec)
+        val secretKey = factory.generateSecret(spec)
         return SecretKeySpec(secretKey.encoded, "AES")
     }
 
-    private fun generarSalt(): ByteArray {
-        val random = SecureRandom()
-        val salt = ByteArray(16)
-        random.nextBytes(salt)
-        return salt
-    }
-
-    fun decodeBase64ToBitmap(base64String: String): Bitmap {
+    fun decodeBase64ToBitmap(base64String: String): Bitmap? {
         // Decodifica la cadena Base64 a un array de bytes
-        val decodedBytes: ByteArray = Base64.decode(base64String, Base64.DEFAULT)
-
+        val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
         // Convierte el array de bytes a un Bitmap
         return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
     }

@@ -1,23 +1,26 @@
 package com.raquelbytes.grapeguard.Controller
 
+import EncryptionUtil
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import com.raquelbytes.grapeguard.API.Interface.VinedoCallback
 import com.raquelbytes.grapeguard.API.Interface.VinedosCallback
-import com.raquelbytes.grapeguard.API.Model.Vinedo
 import com.raquelbytes.grapeguard.API.Model.Usuario
+import com.raquelbytes.grapeguard.API.Model.Vinedo
 import com.raquelbytes.grapeguard.API.Repository.VinedoRepository
 import com.raquelbytes.grapeguard.R
-import com.raquelbytes.grapeguard.Util.EncryptionUtil
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(), AddVinedoDialogFragment.AddVinedoDialogListener {
 
     private lateinit var sharedPreferences: SharedPreferences
 
@@ -27,45 +30,23 @@ class MainActivity : AppCompatActivity() {
 
         sharedPreferences = getSharedPreferences("preferencias", Context.MODE_PRIVATE)
 
-        // Obtener el ID del usuario del intent o de las preferencias
         val idUsuario = getUserIdFromIntentOrPreferences()
 
         if (idUsuario == null || idUsuario == -1) {
-            Log.e("MainActivity", "ID de usuario no válido")
+            Log.e("com.raquelbytes.grapeguard.Controller.MainActivity", "ID de usuario no válido")
             return
         }
 
-        // Obtener referencia al LinearLayout que contiene las tarjetas de viñedos
         val vineyardContainer: LinearLayout = findViewById(R.id.vineyardContainer)
+        val addVineyardButton: Button = findViewById(R.id.add_vinedo_button)
 
-        // Llamar a la función para obtener los viñedos del usuario loggeado
-        VinedoRepository.obtenerVinedosPorUsuario(this, idUsuario, object : VinedosCallback {
-            override fun onVinedosObtenidos(vinedos: List<Vinedo>) {
-                // Recorrer la lista de viñedos y mostrar cada uno en una tarjeta
-                for (vinedo in vinedos) {
-                    val cardView = layoutInflater.inflate(R.layout.vineyard_card, null) as LinearLayout
-                    val vineyardNameTextView: TextView = cardView.findViewById(R.id.vineyardNameTextView)
-                    val locationTextView: TextView = cardView.findViewById(R.id.locationTextView)
-                    vineyardNameTextView.text = vinedo.nombre
-                    locationTextView.text = vinedo.ubicacion
-                    vineyardContainer.addView(cardView)
+        addVineyardButton.setOnClickListener {
+            val dialog = AddVinedoDialogFragment()
+            dialog.setAddVinedoDialogListener(this)
+            dialog.show(supportFragmentManager, "AddVineyardDialogFragment")
+        }
 
-                    // Configurar OnClickListener para la tarjeta
-                    cardView.setOnClickListener {
-                        // Crear un Intent para abrir la actividad VinedoActivity
-                        val intent = Intent(this@MainActivity, VinedoActivity::class.java)
-                        // Pasar el objeto Vinedo completo como extra del Intent
-                        intent.putExtra("vinedo", vinedo)
-                        // Iniciar la actividad VinedoActivity
-                        startActivity(intent)
-                    }
-                }
-            }
-
-            override fun onVinedoError(errorMessage: String) {
-                Log.e("Vinedos Error", errorMessage)
-            }
-        })
+        loadVineyards(idUsuario, vineyardContainer)
     }
 
     private fun getUserIdFromIntentOrPreferences(): Int? {
@@ -79,19 +60,64 @@ class MainActivity : AppCompatActivity() {
 
         return if (usuarioEncriptado != null) {
             try {
-                val usuarioJson = EncryptionUtil.desencriptar(usuarioEncriptado, "admintest123")
+                val usuarioJson = EncryptionUtil.desencriptar(usuarioEncriptado, "ejemploadmin123")
                 val usuario = Gson().fromJson(usuarioJson, Usuario::class.java)
                 usuario.id_usuario
             } catch (ex: JsonSyntaxException) {
-                Log.e("MainActivity", "Error de sintaxis JSON al desencriptar usuario: ${ex.message}")
+                Log.e("com.raquelbytes.grapeguard.Controller.MainActivity", "Error de sintaxis JSON al desencriptar usuario: ${ex.message}")
                 null
             } catch (ex: Exception) {
-                Log.e("MainActivity", "Error al desencriptar usuario: ${ex.message}")
+                Log.e("com.raquelbytes.grapeguard.Controller.MainActivity", "Error al desencriptar usuario: ${ex.message}")
                 null
             }
         } else {
-            Log.e("MainActivity", "No se encontró usuario en las preferencias")
+            Log.e("com.raquelbytes.grapeguard.Controller.MainActivity", "No se encontró usuario en las preferencias")
             null
         }
     }
+
+    private fun loadVineyards(idUsuario: Int, vineyardContainer: LinearLayout) {
+        VinedoRepository.obtenerVinedosPorUsuario(this, idUsuario, object : VinedosCallback {
+            override fun onVinedosObtenidos(vinedos: List<Vinedo>) {
+                for (vinedo in vinedos) {
+                    val cardView = layoutInflater.inflate(R.layout.vineyard_card, null) as LinearLayout
+                    val vineyardNameTextView: TextView = cardView.findViewById(R.id.vineyardNameTextView)
+                    val locationTextView: TextView = cardView.findViewById(R.id.locationTextView)
+                    vineyardNameTextView.text = vinedo.nombre
+                    locationTextView.text = vinedo.ubicacion
+                    vineyardContainer.addView(cardView)
+
+                    cardView.setOnClickListener {
+                        val intent = Intent(this@MainActivity, VinedoActivity::class.java)
+                        intent.putExtra("vinedo", vinedo)
+                        startActivity(intent)
+                    }
+                }
+            }
+
+            override fun onVinedoError(errorMessage: String) {
+                Log.e("Vinedos Error", errorMessage)
+            }
+        })
+    }
+
+    override fun onVinedoAdded(vinedo: Vinedo) {
+        val idUsuario = getUserIdFromIntentOrPreferences() ?: return
+        Log.e("prefs Error", idUsuario.toString());
+
+
+        VinedoRepository.agregarNuevoVinedo(this, idUsuario, vinedo, object : VinedoCallback {
+                override fun onVinedoAgregado(response: String) {
+                    Log.d("Vinedo agregado", response)
+                    val vineyardContainer: LinearLayout = findViewById(R.id.vineyardContainer)
+                    loadVineyards(idUsuario, vineyardContainer)
+                }
+
+                override fun onVinedoError(errorMessage: String) {
+                    Log.e("Error al agregar viñedo", errorMessage)
+                }
+            }
+        )
+    }
+
 }

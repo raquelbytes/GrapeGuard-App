@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/AppTheme"
+    android:scrollbars="none">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/logoImageView"
+            android:layout_width="196dp"
+            android:layout_height="152dp"
+            android:layout_marginTop="100dp"
+            android:src="@drawable/defaultuserimage"
+            app:civ_border_color="#FFFFFF"
+            app:civ_border_width="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/appNameTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+
+        <TextView
+            android:id="@+id/appNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/leaguespartanextrabold"
+            android:lineHeight="44.16sp"
+            android:text="@string/app_name"
+            android:textAlignment="textStart"
+            android:textColor="#8AD667"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logoImageView" />
+
+        <TextView
+            android:id="@+id/welcomeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="29dp"
+            android:fontFamily="@font/leaguespartanbold"
+            android:text="Registrarse"
+            android:textColor="#1E1F22"
+            android:textSize="35sp"
+            app:layout_constraintBottom_toTopOf="@+id/nombreEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.454"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appNameTextView" />
+
+        <TextView
+            android:id="@+id/nombreTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="17dp"
+            android:text="Nombre:"
+            android:textColor="#000000"
+            app:layout_constraintBottom_toTopOf="@+id/apellidosTextView"
+            app:layout_constraintEnd_toStartOf="@+id/nombreEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/welcomeTextView" />
+
+        <EditText
+            android:id="@+id/nombreEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:background="#FFFFFF"
+            android:hint="Nombre"
+            android:inputType="textEmailAddress"
+            app:layout_constraintBottom_toBottomOf="@+id/nombreTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/nombreTextView"
+            app:layout_constraintTop_toTopOf="@id/nombreTextView" />
+
+        <TextView
+            android:id="@+id/apellidosTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="19dp"
+            android:text="Apellidos:"
+            android:textColor="#000000"
+            app:layout_constraintBottom_toTopOf="@+id/emailLabelTextView"
+            app:layout_constraintEnd_toStartOf="@+id/apellidosEditText"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/nombreTextView"
+            app:layout_constraintTop_toBottomOf="@id/nombreEditText" />
+
+        <EditText
+            android:id="@+id/apellidosEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:hint="Apellidos"
+            android:inputType="textEmailAddress"
+            app:layout_constraintBottom_toBottomOf="@+id/apellidosTextView"
+            app:layout_constraintEnd_toEndOf="@id/nombreEditText"
+            app:layout_constraintStart_toStartOf="@id/nombreEditText"
+            app:layout_constraintTop_toTopOf="@id/apellidosTextView" />
+
+        <TextView
+            android:id="@+id/emailLabelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="48dp"
+            android:layout_marginBottom="19dp"
+            android:text="Email:"
+            android:textColor="#000000"
+            app:layout_constraintBottom_toTopOf="@+id/passwordLabelTextView"
+            app:layout_constraintEnd_toStartOf="@+id/emailEditText"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/nombreTextView"
+            app:layout_constraintTop_toBottomOf="@id/apellidosEditText" />
+
+        <EditText
+            android:id="@+id/emailEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            app:layout_constraintBottom_toBottomOf="@+id/emailLabelTextView"
+            app:layout_constraintEnd_toEndOf="@id/apellidosEditText"
+            app:layout_constraintStart_toStartOf="@id/apellidosEditText"
+            app:layout_constraintTop_toTopOf="@id/emailLabelTextView" />
+
+        <TextView
+            android:id="@+id/passwordLabelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="11dp"
+            android:layout_marginBottom="20dp"
+            android:text="Contraseña:"
+            android:textColor="#000000"
+            app:layout_constraintBottom_toTopOf="@+id/fotoPerfil"
+            app:layout_constraintEnd_toStartOf="@+id/passwordEditText"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/nombreTextView"
+            app:layout_constraintTop_toBottomOf="@id/emailEditText" />
+
+        <EditText
+            android:id="@+id/passwordEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            app:layout_constraintBottom_toBottomOf="@+id/passwordLabelTextView"
+            app:layout_constraintEnd_toEndOf="@id/emailEditText"
+            app:layout_constraintStart_toStartOf="@id/emailEditText"
+            app:layout_constraintTop_toTopOf="@id/passwordLabelTextView" />
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/fotoPerfil"
+            android:layout_width="114dp"
+            android:layout_height="114dp"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="60dp"
+            android:src="@drawable/defaultuserimage"
+            app:civ_border_color="#FFFFFF"
+            app:civ_border_width="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/loginButton"
+            app:layout_constraintEnd_toEndOf="@+id/btnSacarFoto"
+            app:layout_constraintEnd_toStartOf="@+id/btnSacarFoto"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordLabelTextView" />
+
+        <!-- Botón de registro -->
+
+        <Button
+            android:id="@+id/btnSacarFoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="105dp"
+            android:layout_marginEnd="48dp"
+            android:backgroundTint="#8BD767"
+            android:text="Sacar Foto"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/fotoPerfil"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/fotoPerfil"
+            app:layout_constraintTop_toBottomOf="@+id/passwordEditText" />
+
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:backgroundTint="#8BD767"
+            android:text="Registrarse"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnSacarFoto" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

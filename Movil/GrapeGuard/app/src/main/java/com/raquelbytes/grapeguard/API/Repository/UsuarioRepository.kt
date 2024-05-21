@@ -21,7 +21,7 @@ class UsuarioRepository {
             val mensaje: String
         )
         fun loginUsuario(context: Context, email: String, contrasena: String, callBack: UserLoginCallback) {
-            val url = "http://192.168.1.132:8080/usuarios/login"
+            val url = "http://192.168.1.141:8080/usuarios/login"
             val stringRequest = object : StringRequest(Method.POST, url,
                 Response.Listener { response ->
                     Log.d("Login Response", response)
@@ -65,7 +65,7 @@ class UsuarioRepository {
 
 
         fun registrarUsuario(context: Context, usuario: Usuario, callback: UserRegisterCallback) {
-            val url = "http://192.168.1.132:8080/usuarios/register"
+            val url = "http://192.168.1.141:8080/usuarios/register"
             val stringRequest = object : StringRequest(Method.POST, url,
                 Response.Listener { response -> callback.onUserRegisterSuccess(response) },
                 Response.ErrorListener { error ->

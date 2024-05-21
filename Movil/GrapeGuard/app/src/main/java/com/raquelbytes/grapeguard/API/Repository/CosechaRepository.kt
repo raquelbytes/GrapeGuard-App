@@ -26,7 +26,7 @@ class CosechaRepository {
     companion object {
 
         fun obtenerCosechasPorVinedo(context: Context, idVinedo: Int, callback: CosechaCallback) {
-            val url = "http://192.168.1.132:8080/cosecha/vinedo/$idVinedo"
+            val url = "http://192.168.1.141:8080/cosecha/vinedo/$idVinedo"
 
             val utf8StringRequest = object : StringRequest(Method.GET, url,
                 { response ->
@@ -71,16 +71,15 @@ class CosechaRepository {
 
 
         fun agregarCosecha(context: Context, idVinedo: Int, nuevaCosecha: Cosecha, callback: AgregarCosechaCallback) {
-            val url = "http://192.168.1.132:8080/cosecha/vinedo/$idVinedo/cosecha/nuevo"
+            val url = "http://192.168.1.141:8080/cosecha/vinedo/$idVinedo/nuevo"
             val requestBody = Gson().toJson(nuevaCosecha)
 
             val stringRequest = object : StringRequest(
                 Request.Method.POST, url,
                 Response.Listener { response ->
                     // Si la solicitud se completa con éxito, llama al método de callback con la cosecha agregada
-                    val gson = Gson()
-                    val cosecha: Cosecha = gson.fromJson(response, Cosecha::class.java)
-                    callback.onCosechaAgregada(cosecha)
+
+                    callback.onCosechaAgregada(response)
                 },
                 Response.ErrorListener { error ->
                     // Maneja errores de la solicitud
@@ -111,7 +110,7 @@ class CosechaRepository {
             queue.add(stringRequest)
         }
         fun borrarCosecha(context: Context, idCosecha: Int, callback: BorrarCosechaCallback) {
-            val url = "http://192.168.1.132:8080/cosecha/$idCosecha"
+            val url = "http://192.168.1.141:8080/cosecha/$idCosecha"
             val stringRequest = StringRequest(
                 Request.Method.DELETE, url,
                 { response ->
