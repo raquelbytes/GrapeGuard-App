@@ -48,10 +48,5 @@ object EncryptionUtil {
         return SecretKeySpec(secretKey.encoded, "AES")
     }
 
-    fun decodeBase64ToBitmap(base64String: String): Bitmap? {
-        // Decodifica la cadena Base64 a un array de bytes
-        val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
-        // Convierte el array de bytes a un Bitmap
-        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
-    }
+
 }

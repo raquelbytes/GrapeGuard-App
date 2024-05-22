@@ -15,7 +15,6 @@ import com.raquelbytes.grapeguard.API.Model.Usuario
 import com.raquelbytes.grapeguard.API.Repository.UsuarioRepository
 import com.raquelbytes.grapeguard.R
 
-
 class LoginActivity : AppCompatActivity(), UserLoginCallback {
 
     private lateinit var sharedPreferences: SharedPreferences
@@ -31,6 +30,7 @@ class LoginActivity : AppCompatActivity(), UserLoginCallback {
         val contrasena = findViewById<EditText>(R.id.passwordEditText)
         val btnLogin = findViewById<Button>(R.id.loginButton)
         checkBox = findViewById<CheckBox>(R.id.recordarmeCheckBox)
+        //val btnLogout = findViewById<Button>(R.id.logoutButton) // Button to redirect to LogOutActivity
 
         btnLogin.setOnClickListener {
             UsuarioRepository.loginUsuario(
@@ -40,6 +40,11 @@ class LoginActivity : AppCompatActivity(), UserLoginCallback {
                 this
             )
         }
+
+    /*    btnLogout.setOnClickListener {
+            val intentLogOutActivity = Intent(this, LogOutActivity::class.java)
+            startActivity(intentLogOutActivity)
+        } */
     }
 
     private val someActivityResultLauncher = registerForActivityResult(
@@ -51,23 +56,28 @@ class LoginActivity : AppCompatActivity(), UserLoginCallback {
     override fun onLoginSuccess(usuario: Usuario) {
         try {
             if (checkBox.isChecked) {
-                // GUARDAR EL USUARIO EN LAS SHARED PREFERENCES
+                // Guardar el usuario en las SharedPreferences
                 val editor = sharedPreferences.edit()
                 val usuarioEncriptado = EncryptionUtil.encriptar(
                     EncryptionUtil.transformarUsuarioToJson(usuario),
                     "ejemploadmin123"
                 )
                 editor.putString("Usuario", usuarioEncriptado)
+                editor.putInt("id_usuario", usuario.id_usuario ?: -1)
+                editor.putString("nombre", usuario.nombre)
+                editor.putString("apellido", usuario.apellido)
+                editor.putString("email", usuario.email)
+                editor.putString("contrasena", usuario.contrasena)
+                editor.putString("foto", usuario.foto)
                 editor.apply()
             }
         } catch (ex: Exception) {
             Log.d("ERROR", ex.message ?: "")
         }
 
-
         Toast.makeText(this, "¡Bienvenido a GrapeGuard!", Toast.LENGTH_LONG).show()
 
-        // PASAR A LA PANTALLA  MAIN
+        // Pasar a la pantalla Main
         val intentMainActivity = Intent(applicationContext, MainActivity::class.java)
         intentMainActivity.putExtra("id_usuario", usuario.id_usuario)
         someActivityResultLauncher.launch(intentMainActivity)

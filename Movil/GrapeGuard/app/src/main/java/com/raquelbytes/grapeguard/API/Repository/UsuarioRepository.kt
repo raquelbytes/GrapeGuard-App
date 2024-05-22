@@ -11,6 +11,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.raquelbytes.grapeguard.API.Interface.UserLoginCallback
 import com.raquelbytes.grapeguard.API.Interface.UserRegisterCallback
+import com.raquelbytes.grapeguard.API.Interface.UserUpdateCallback
 import com.raquelbytes.grapeguard.API.Model.Usuario
 import java.nio.charset.StandardCharsets
 
@@ -20,6 +21,7 @@ class UsuarioRepository {
             val usuario: Usuario,
             val mensaje: String
         )
+
         fun loginUsuario(context: Context, email: String, contrasena: String, callBack: UserLoginCallback) {
             val url = "http://192.168.1.141:8080/usuarios/login"
             val stringRequest = object : StringRequest(Method.POST, url,
@@ -63,7 +65,6 @@ class UsuarioRepository {
             queue.add(stringRequest)
         }
 
-
         fun registrarUsuario(context: Context, usuario: Usuario, callback: UserRegisterCallback) {
             val url = "http://192.168.1.141:8080/usuarios/register"
             val stringRequest = object : StringRequest(Method.POST, url,
@@ -74,6 +75,36 @@ class UsuarioRepository {
                         errorMessage = String(error.networkResponse.data, StandardCharsets.UTF_8)
                     }
                     callback.onUserRegisterFailed(errorMessage)
+                }) {
+                override fun getBody(): ByteArray {
+                    val gson = Gson()
+                    val payload = gson.toJson(usuario)
+                    return payload.toByteArray(StandardCharsets.UTF_8)
+                }
+
+                @Throws(AuthFailureError::class)
+                override fun getHeaders(): Map<String, String> {
+                    val headers = HashMap<String, String>()
+                    headers["Content-Type"] = "application/json; charset=utf-8"
+                    return headers
+                }
+            }
+
+            val queue = Volley.newRequestQueue(context)
+            queue.add(stringRequest)
+        }
+
+        // Nuevo método para modificar usuario
+        fun modificarUsuario(context: Context, usuario: Usuario, idUsuario: Int, callback: UserUpdateCallback) {
+            val url = "http://192.168.1.141:8080/usuarios/$idUsuario/modificar"
+            val stringRequest = object : StringRequest(Method.PUT, url,
+                Response.Listener { response -> callback.onUserUpdateSuccess(response) },
+                Response.ErrorListener { error ->
+                    var errorMessage = "Error desconocido"
+                    if (error.networkResponse != null && error.networkResponse.data != null) {
+                        errorMessage = String(error.networkResponse.data, StandardCharsets.UTF_8)
+                    }
+                    callback.onUserUpdateFailed(errorMessage)
                 }) {
                 override fun getBody(): ByteArray {
                     val gson = Gson()

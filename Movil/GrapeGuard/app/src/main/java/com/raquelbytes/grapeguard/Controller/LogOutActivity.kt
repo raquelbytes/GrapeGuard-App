@@ -1,7 +1,7 @@
 package com.raquelbytes.grapeguard.Controller
 
-/*
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -15,16 +15,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.raquelbytes.grapeguard.API.Interface.UserRegisterCallback
+import com.raquelbytes.grapeguard.API.Interface.UserUpdateCallback
 import com.raquelbytes.grapeguard.API.Model.Usuario
 import com.raquelbytes.grapeguard.API.Repository.UsuarioRepository
 import com.raquelbytes.grapeguard.R
 import com.raquelbytes.grapeguard.Util.ImageHelper
 
-class LogOutActivity : AppCompatActivity(), UserRegisterCallback {
+class LogOutActivity : AppCompatActivity(), UserUpdateCallback {
 
     private lateinit var nombre: EditText
-    private lateinit var apellidos: EditText
+    private lateinit var apellido: EditText
     private lateinit var email: EditText
     private lateinit var contrasena: EditText
     private lateinit var fotoPerfil: ImageView
@@ -33,28 +33,29 @@ class LogOutActivity : AppCompatActivity(), UserRegisterCallback {
 
     private val MY_CAMERA_PERMISSION_CODE = 100
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.logout_view)
 
         // Initialize views
         nombre = findViewById(R.id.nombreEditText)
-        apellidos = findViewById(R.id.apellidosEditText)
+        apellido = findViewById(R.id.apellidosEditText)
         email = findViewById(R.id.emailEditText)
         contrasena = findViewById(R.id.passwordEditText)
         fotoPerfil = findViewById(R.id.fotoPerfil)
         val btnFoto = findViewById<Button>(R.id.btnSacarFoto)
-        val btnGuardar = findViewById<Button>(R.id.guardarButton)
+        val btnGuardar = findViewById<Button>(R.id.saveChanges)
 
-        // Simulate fetching current user data from the server
+        // Fetch current user data
         currentUser = getCurrentUser()
 
         // Initialize the views with current user data
         nombre.setText(currentUser.nombre)
-        apellidos.setText(currentUser.apellidos)
+        apellido.setText(currentUser.apellido)
         email.setText(currentUser.email)
-        contrasena.setText(currentUser.password)
-        fotoPerfil.setImageBitmap(ImageHelper.decodeBase64ToBitmap(currentUser.photoUrl))
+        contrasena.setText(currentUser.contrasena)
+        fotoPerfil.setImageBitmap(currentUser.foto?.let { ImageHelper.decodeBase64ToBitmap(it) })
 
         // Set up the button listeners
         btnFoto.setOnClickListener {
@@ -71,7 +72,27 @@ class LogOutActivity : AppCompatActivity(), UserRegisterCallback {
     }
 
     private fun getCurrentUser(): Usuario {
+        // Try to get the user data from SharedPreferences
+        val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        val idUsuario = sharedPreferences.getInt("id_usuario", -1)
+        val nombre = sharedPreferences.getString("nombre", null)
+        val apellido = sharedPreferences.getString("apellido", null)
+        val email = sharedPreferences.getString("email", null)
+        val contrasena = sharedPreferences.getString("contrasena", null)
+        val foto = sharedPreferences.getString("foto", null)
 
+        return if (idUsuario != -1 && nombre != null && apellido != null && email != null && contrasena != null && foto != null) {
+            Usuario(
+                id_usuario = idUsuario,
+                nombre = nombre,
+                apellido = apellido,
+                email = email,
+                contrasena = contrasena,
+                foto = foto
+            )
+        } else {
+            intent.getSerializableExtra("usuario") as Usuario
+        }
     }
 
     private fun openCamera() {
@@ -80,34 +101,29 @@ class LogOutActivity : AppCompatActivity(), UserRegisterCallback {
     }
 
     private fun updateUser() {
-        val updatedNombre = nombre.text.toString().ifEmpty { currentUser.nombre }
-        val updatedApellidos = apellidos.text.toString().ifEmpty { currentUser.apellidos }
-        val updatedEmail = email.text.toString().ifEmpty { currentUser.email }
-        val updatedPassword = contrasena.text.toString().ifEmpty { currentUser.password }
-        val updatedPhotoUrl = userPhoto?.let { ImageHelper.encodeImageViewToBase64(fotoPerfil) } ?: currentUser.photoUrl
+        val updatedNombre = if (nombre.text.toString().isNotEmpty()) nombre.text.toString() else currentUser.nombre
+        val updatedApellido = if (apellido.text.toString().isNotEmpty()) apellido.text.toString() else currentUser.apellido
+        val updatedEmail = if (email.text.toString().isNotEmpty()) email.text.toString() else currentUser.email
+        val updatedContrasena = if (contrasena.text.toString().isNotEmpty()) contrasena.text.toString() else currentUser.contrasena
+        val updatedFoto = userPhoto?.let { ImageHelper.encodeImageViewToBase64(fotoPerfil) } ?: currentUser.foto
 
-        currentUser = currentUser.copy(
-            nombre = updatedNombre,
-            apellidos = updatedApellidos,
-            email = updatedEmail,
-            password = updatedPassword,
-            photoUrl = updatedPhotoUrl
-        )
+        currentUser.nombre = updatedNombre
+        currentUser.apellido = updatedApellido
+        currentUser.email = updatedEmail
+        currentUser.contrasena = updatedContrasena
+        currentUser.foto = updatedFoto
 
-
-        UsuarioRepository.updateUsuario(this, currentUser, this)
+        // Sending updated user data to the server
+        UsuarioRepository.modificarUsuario(this, currentUser, currentUser.id_usuario!!, this)
     }
 
-    override fun onUserRegisterSuccess(response: String) {
+    override fun onUserUpdateSuccess(response: String) {
         Toast.makeText(this, "Usuario actualizado con éxito", Toast.LENGTH_LONG).show()
         finish()
     }
 
-    override fun onUserRegisterFailed(error: String) {
+    override fun onUserUpdateFailed(error: String) {
         Toast.makeText(this, "Error al actualizar usuario: $error", Toast.LENGTH_LONG).show()
-        if (error.contains("El usuario ya existe")) {
-            email.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_light))
-        }
     }
 
     private val someActivityResultLauncher = registerForActivityResult(
@@ -134,4 +150,3 @@ class LogOutActivity : AppCompatActivity(), UserRegisterCallback {
         }
     }
 }
-*/

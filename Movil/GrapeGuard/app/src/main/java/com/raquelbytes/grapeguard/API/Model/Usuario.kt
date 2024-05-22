@@ -1,7 +1,9 @@
 package com.raquelbytes.grapeguard.API.Model
 
-class Usuario {
-    val id_usuario: Int? = null
+import java.io.Serializable
+
+class Usuario : Serializable {
+    var id_usuario: Int? = null
     var nombre: String? = null
     var apellido: String? = null
     var email: String? = null
@@ -9,6 +11,15 @@ class Usuario {
     var foto: String? = null
 
     constructor()
+
+    constructor(id_usuario: Int, nombre: String, apellido: String, email: String, contrasena: String, foto: String) {
+        this.id_usuario = id_usuario
+        this.nombre = nombre
+        this.apellido = apellido
+        this.email = email
+        this.contrasena = contrasena
+        this.foto = foto
+    }
 
     constructor(nombre: String, apellido: String, email: String, contrasena: String, foto: String) {
         this.nombre = nombre
