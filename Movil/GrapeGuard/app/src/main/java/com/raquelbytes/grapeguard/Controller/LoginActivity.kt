@@ -77,9 +77,9 @@ class LoginActivity : AppCompatActivity(), UserLoginCallback {
 
         Toast.makeText(this, "¡Bienvenido a GrapeGuard!", Toast.LENGTH_LONG).show()
 
-        // Pasar a la pantalla Main
         val intentMainActivity = Intent(applicationContext, MainActivity::class.java)
         intentMainActivity.putExtra("id_usuario", usuario.id_usuario)
+        intentMainActivity.putExtra("url_imagen_perfil", usuario.foto)
         someActivityResultLauncher.launch(intentMainActivity)
     }
 

@@ -7,9 +7,11 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.raquelbytes.grapeguard.API.Interface.VinedoCallback
@@ -26,16 +28,25 @@ class MainActivity : AppCompatActivity(), AddVinedoDialogFragment.AddVinedoDialo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.vinedos_view)
 
         sharedPreferences = getSharedPreferences("preferencias", Context.MODE_PRIVATE)
 
         val idUsuario = getUserIdFromIntentOrPreferences()
+        val urlImagenPerfil = getUserImageFromIntentOrPreferences()
 
         if (idUsuario == null || idUsuario == -1) {
             Log.e("com.raquelbytes.grapeguard.Controller.MainActivity", "ID de usuario no válido")
             return
         }
+
+        val profileImageView: ImageView = findViewById(R.id.profileImageView)
+        Glide.with(this)
+            .load(urlImagenPerfil)
+            .placeholder(R.drawable.defaultuserimage)
+            .circleCrop()
+            .into(profileImageView)
 
         val vineyardContainer: LinearLayout = findViewById(R.id.vineyardContainer)
         val addVineyardButton: Button = findViewById(R.id.add_vinedo_button)
@@ -63,6 +74,32 @@ class MainActivity : AppCompatActivity(), AddVinedoDialogFragment.AddVinedoDialo
                 val usuarioJson = EncryptionUtil.desencriptar(usuarioEncriptado, "ejemploadmin123")
                 val usuario = Gson().fromJson(usuarioJson, Usuario::class.java)
                 usuario.id_usuario
+            } catch (ex: JsonSyntaxException) {
+                Log.e("com.raquelbytes.grapeguard.Controller.MainActivity", "Error de sintaxis JSON al desencriptar usuario: ${ex.message}")
+                null
+            } catch (ex: Exception) {
+                Log.e("com.raquelbytes.grapeguard.Controller.MainActivity", "Error al desencriptar usuario: ${ex.message}")
+                null
+            }
+        } else {
+            Log.e("com.raquelbytes.grapeguard.Controller.MainActivity", "No se encontró usuario en las preferencias")
+            null
+        }
+    }
+    private fun getUserImageFromIntentOrPreferences(): String? {
+        val urlImagenPerfil = intent.getStringExtra("url_imagen_perfil")
+
+        if (urlImagenPerfil != null) {
+            return urlImagenPerfil
+        }
+
+        val usuarioEncriptado = sharedPreferences.getString("Usuario", null)
+
+        return if (usuarioEncriptado != null) {
+            try {
+                val usuarioJson = EncryptionUtil.desencriptar(usuarioEncriptado, "ejemploadmin123")
+                val usuario = Gson().fromJson(usuarioJson, Usuario::class.java)
+                usuario.foto
             } catch (ex: JsonSyntaxException) {
                 Log.e("com.raquelbytes.grapeguard.Controller.MainActivity", "Error de sintaxis JSON al desencriptar usuario: ${ex.message}")
                 null
