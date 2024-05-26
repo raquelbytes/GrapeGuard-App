@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -45,6 +46,17 @@ public class UsuarioController {
         }
     }
 
+    @GetMapping(ApiMap.USUARIO_POR_ID)
+    public ResponseEntity<UsuarioDTO> obtenerUsuarioPorId(@PathVariable Integer ID_usuario) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(ID_usuario);
+        if (usuarioOptional.isPresent()) {
+            Usuario usuario = usuarioOptional.get();
+            UsuarioDTO usuarioDTO = UsuarioDTO.converter(usuario);
+            return ResponseEntity.ok(usuarioDTO);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 
 

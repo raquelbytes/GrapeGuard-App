@@ -1,10 +1,8 @@
 package com.raquelbytes.grapeguard.API.Interface
 
 import com.raquelbytes.grapeguard.API.Model.Vinedo
-import java.math.BigDecimal
 
-interface VinedoCallback {
-    //fun onVinedoObtenido(vinedo: Vinedo)
-    fun onVinedoAgregado(response: String)
+interface VinedoObtenidoCallback {
+    fun onVinedoObtenido(vinedo: Vinedo)
     fun onVinedoError(errorMessage: String)
 }

@@ -1,10 +1,112 @@
 <resources>
     <string name="app_name">GrapeGuard</string>
-    <string name="title_activity_login">Login</string>
+    <string name="title_activity_login" translatable="false">Login</string>
         <string-array name="estado_tarea_array">
             <item>Pendiente</item>
             <item>EnProgreso</item>
             <item>Completada</item>
         </string-array>
-    </resources>
+    <string name="hint_variedad">Variedad</string>
+    <string name="hint_fecha_cosecha">Fecha de Cosecha</string>
+    <string name="hint_cantidad_uvas">Cantidad de Uvas (kg)</string>
+    <string name="hint_precio_venta">Precio de Venta por Kg</string>
+    <string name="button_cancelar">Cancelar</string>
+    <string name="button_agregar">Agregar</string>
+
+    <string name="hint_nombre">Nombre</string>
+    <string name="hint_ubicacion">Ubicación</string>
+    <string name="hint_fecha_plantacion">Seleccionar Fecha de Plantación</string>
+    <string name="hint_hectareas">Hectáreas</string>
+    <string name="button_cancelarVinedo">Cancelar</string>
+    <string name="button_anadir">Añadir</string>
+
+    <string name="hint_tarea">Tarea</string>
+    <string name="hint_seleccionar_recordatorio">Seleccionar Recordatorio</string>
+    <string name="hint_seleccionar_fecha_realizacion">Seleccionar Fecha de Realización</string>
+    <string name="hint_fecha_realizacion">Fecha de Realización</string>
+    <string name="button_cancelarTarea">Cancelar</string>
+    <string name="button_anadirTarea">Añadir</string>
+
+    <string name="hint_descripcion_tarea">Descripción de la Tarea</string>
+    <string name="hint_estado_tarea">Estado de la Tarea</string>
+    <string name="hint_recordatorio_tarea">Recordatorio de la Tarea</string>
+    <string name="hint_fecha_realizacion_tarea">Fecha de Realización de la Tarea</string>
+
+
+    <string name="button_login">Iniciar sesión</string>
+    <string name="button_register">Registrarse</string>
+    <string name="welcome_message">Bienvenido a GrapeGuard</string>
+    <string name="login_using">Iniciar sesión con:</string>
+    <string name="tagline">Cultiva la excelencia</string>
+
+    <string name="login_title">Inicia Sesión</string>
+    <string name="email_label">Email:</string>
+    <string name="email_hint">Email</string>
+    <string name="password_label">Contraseña:</string>
+    <string name="password_hint">Contraseña</string>
+    <string name="remember_me">Recordarme</string>
+    <string name="button_loginAcceder">Acceder</string>
+
+    <string name="register_title">Registrarse</string>
+    <string name="name_label">Nombre:</string>
+    <string name="name_hint">Nombre</string>
+    <string name="last_name_label">Apellidos:</string>
+    <string name="last_name_hint">Apellidos</string>
+    <string name="email_labelReg">Email:</string>
+    <string name="email_hintReg">Email</string>
+    <string name="password_labelReg">Contraseña:</string>
+    <string name="password_hintReg">Contraseña</string>
+    <string name="take_photo">Sacar Foto</string>
+    <string name="save">Guardar</string>
+    <string name="logout">Cerrar Sesión</string>
+
+    <string name="logo_description">Logo</string>
+
+    <string name="vineyard_name">Nombre del Viñedo</string>
+    <string name="vineyard_location">Ubicación del Viñedo</string>
+    <string name="variety">Variedad</string>
+    <string name="quantity">Cantidad</string>
+    <string name="price_per_kg">Precio/Kg</string>
+    <string name="harvest_date">Fecha Cosecha</string>
+    <string name="add_task">Añadir Tarea</string>
+    <string name="add_harvest">Añadir Cosecha</string>
+
+
+    <string name="add_vineyard">Añadir Viñedo</string>
+
+    <string name="vineyard_name_placeholder">Nombre del Viñedo</string>
+    <string name="vineyard_location_placeholder">Ubicación del Viñedo</string>
+
+    <string name="change_to_galician">Cambiar a Gallego</string>
+    <string name="change_to_spanish">Cambiar a castellano</string>
+
+    <string name="toast_complete_all_fields">Por favor, completa todos los campos.</string>
+    <string name="toast_invalid_number_format">Formato de número no válido.</string>
+
+    <string name="toast_bienvenido_grapeguard">¡Bienvenido a GrapeGuard!</string>
+    <string name="toast_usuario_contraseña_incorrectos">Usuario o contraseña incorrectos</string>
+    <string name="toast_error_inesperado">Error Inesperado</string>
+
+    <!-- Toast messages -->
+    <string name="toast_foto_no_capturada">Foto no capturada</string>
+    <string name="toast_permiso_camara_denegado">Permiso de cámara denegado</string>
+    <string name="toast_error_obtener_usuario">Error al obtener la información del usuario</string>
+    <string name="toast_usuario_actualizado_exitoso">Usuario actualizado con éxito</string>
+    <string name="toast_error_actualizar_usuario">Error al actualizar usuario</string>
+
+
+    <!-- Mensajes de error -->
+    <string name="error_empty_fields">Por favor, complete todos los campos</string>
+    <string name="error_invalid_variety_name">El nombre de la variedad solo debe contener letras</string>
+
+    <string name="error_only_letters">El nombre y el apellido deben contener solo letras</string>
+    <string name="error_invalid_email_format">Por favor, ingrese un correo electrónico válido</string>
+    <string name="error_password_length">La contraseña no puede tener más de 16 caracteres</string>
+
+    <string name="notification_content">É hora de: </string>
+
+    <string name="logout_title">Modificar Usuario </string>
+
+
+</resources>
 

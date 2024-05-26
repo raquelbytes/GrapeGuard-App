@@ -10,12 +10,12 @@
               <deviceKey>
                 <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\raque\.android\avd\Pixel_8_Pro_API_30_2.avd" />
+                  <value value="C:\Users\raque\.android\avd\Sin_Loggear.avd" />
                 </Key>
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-05-18T13:52:06.062314900Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-05-26T10:16:10.177703200Z" />
         </State>
       </entry>
     </value>

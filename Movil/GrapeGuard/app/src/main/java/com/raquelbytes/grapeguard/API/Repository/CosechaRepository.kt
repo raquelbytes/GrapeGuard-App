@@ -16,17 +16,17 @@ import com.raquelbytes.grapeguard.API.Interface.AgregarCosechaCallback
 import com.raquelbytes.grapeguard.API.Interface.BorrarCosechaCallback
 import com.raquelbytes.grapeguard.API.Interface.CosechaCallback
 import com.raquelbytes.grapeguard.API.Model.Cosecha
+import com.raquelbytes.grapeguard.Util.ApiMap
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-
 class CosechaRepository {
     companion object {
 
         fun obtenerCosechasPorVinedo(context: Context, idVinedo: Int, callback: CosechaCallback) {
-            val url = "http://192.168.1.141:8080/cosecha/vinedo/$idVinedo"
+            val url = "${ApiMap.BASE_URL}${ApiMap.COSECHA_POR_VINEDO_ID.replace("{idVinedo}", idVinedo.toString())}"
 
             val utf8StringRequest = object : StringRequest(Method.GET, url,
                 { response ->
@@ -71,14 +71,13 @@ class CosechaRepository {
 
 
         fun agregarCosecha(context: Context, idVinedo: Int, nuevaCosecha: Cosecha, callback: AgregarCosechaCallback) {
-            val url = "http://192.168.1.141:8080/cosecha/vinedo/$idVinedo/nuevo"
+            val url = "${ApiMap.BASE_URL}${ApiMap.COSECHA_AGREGAR_POR_VINEDO_ID.replace("{idVinedo}", idVinedo.toString())}"
             val requestBody = Gson().toJson(nuevaCosecha)
 
             val stringRequest = object : StringRequest(
                 Request.Method.POST, url,
                 Response.Listener { response ->
                     // Si la solicitud se completa con éxito, llama al método de callback con la cosecha agregada
-
                     callback.onCosechaAgregada(response)
                 },
                 Response.ErrorListener { error ->
@@ -109,8 +108,9 @@ class CosechaRepository {
             val queue = Volley.newRequestQueue(context)
             queue.add(stringRequest)
         }
+
         fun borrarCosecha(context: Context, idCosecha: Int, callback: BorrarCosechaCallback) {
-            val url = "http://192.168.1.141:8080/cosecha/$idCosecha"
+            val url = "${ApiMap.BASE_URL}${ApiMap.COSECHA_ELIMINAR_POR_ID.replace("{id}", idCosecha.toString())}"
             val stringRequest = StringRequest(
                 Request.Method.DELETE, url,
                 { response ->
@@ -133,6 +133,5 @@ class CosechaRepository {
             val queue: RequestQueue = Volley.newRequestQueue(context)
             queue.add(stringRequest)
         }
-
     }
 }

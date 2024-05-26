@@ -11,7 +11,7 @@
     <Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:text="GrapeGuard"
+        android:text="@string/app_name"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -22,13 +22,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profileImageView"
-            android:layout_width="56dp"
+            android:layout_width="58dp"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/defaultuserimage" />
+            android:src="@drawable/defaultuserimage"
+            android:onClick="onProfileImageClick" />
+
+
     </Toolbar>
 
 
@@ -39,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toTopOf="@+id/buttons_container">
 
         <!-- Contenedor LinearLayout para las tarjetas de viñedos -->
         <LinearLayout
@@ -61,19 +64,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="16dp">
 
-        <!-- Botón para añadir tarea -->
+        <!-- Botón para añadir viñedo -->
         <Button
             android:id="@+id/add_vinedo_button"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:backgroundTint="#8AD667"
-            android:text="Añadir Viñedo"
+            android:text="@string/add_vineyard"
             android:textColor="#000000"
             android:textSize="16sp"
             app:cornerRadius="100dp" />
-
-
 
     </LinearLayout>
 

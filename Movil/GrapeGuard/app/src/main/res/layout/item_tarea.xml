@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Layout horizontal para el texto de la tarea -->
+    <!-- Layout vertical para la descripción, el estado y la fecha -->
     <LinearLayout
+        android:id="@+id/textContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:layout_toStartOf="@+id/iconContainer"
+        android:layout_alignParentStart="true">
 
         <!-- Texto de la descripción de la tarea -->
         <TextView
             android:id="@+id/textViewDescripcionTarea"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:text="@string/hint_descripcion_tarea" />
 
         <!-- Texto del estado de la tarea -->
         <TextView
@@ -27,16 +29,8 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="@android:color/black"
-            android:layout_marginStart="8dp" />
-
-        <!-- Texto del recordatorio de la tarea -->
-        <TextView
-            android:id="@+id/textViewRecordatorioTarea"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@android:color/black"
-            android:layout_marginStart="8dp" />
+            android:text="@string/hint_estado_tarea"
+            android:layout_marginTop="8dp" />
 
         <!-- Texto de la fecha de realización de la tarea -->
         <TextView
@@ -45,17 +39,37 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="@android:color/black"
+            android:text="@string/hint_fecha_realizacion_tarea"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+
+    <!-- Layout horizontal para el icono del recordatorio y el botón de eliminar -->
+    <LinearLayout
+        android:id="@+id/iconContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true">
+
+        <!-- Icono del recordatorio de la tarea -->
+        <ImageView
+            android:id="@+id/imageViewRecordatorioTarea"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/alarm"
+            android:padding="8dp"
+            android:visibility="gone" />
+
+        <!-- Botón de eliminar -->
+        <ImageButton
+            android:id="@+id/buttonDelete"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/delete"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="8dp"
             android:layout_marginStart="8dp" />
     </LinearLayout>
 
-    <!-- Botón de eliminar -->
-    <ImageButton
-        android:id="@+id/buttonDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/delete"
-        android:background="?android:attr/selectableItemBackground"
-        android:padding="8dp"
-        android:layout_gravity="end" />
-
-</LinearLayout>
+</RelativeLayout>

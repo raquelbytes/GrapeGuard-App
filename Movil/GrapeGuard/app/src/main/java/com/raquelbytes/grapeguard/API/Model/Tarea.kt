@@ -1,6 +1,5 @@
 package com.raquelbytes.grapeguard.API.Model
 
-import java.time.LocalDateTime
 
 class Tarea{
     var id: Int? = null

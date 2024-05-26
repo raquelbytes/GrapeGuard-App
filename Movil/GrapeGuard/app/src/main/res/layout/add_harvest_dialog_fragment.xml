@@ -7,24 +7,32 @@
     android:theme="@style/AppTheme">
 
     <EditText
+        android:id="@+id/nombreVariedad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_variedad"
+        android:inputType="text" />
+
+
+    <EditText
         android:id="@+id/fechaCosechaEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Fecha de Cosecha"
+        android:hint="@string/hint_fecha_cosecha"
         android:focusable="false" />
 
     <EditText
         android:id="@+id/cantidadUvasEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Cantidad de Uvas (kg)"
+        android:hint="@string/hint_cantidad_uvas"
         android:inputType="numberDecimal" />
 
     <EditText
         android:id="@+id/precioVentaKgEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Precio de Venta por Kg"
+        android:hint="@string/hint_precio_venta"
         android:inputType="numberDecimal" />
 
     <LinearLayout
@@ -38,13 +46,13 @@
             android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancelar" />
+            android:text="@string/button_cancelar" />
 
         <Button
             android:id="@+id/addButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Agregar"
+            android:text="@string/button_agregar"
             android:layout_marginStart="8dp" />
     </LinearLayout>
 

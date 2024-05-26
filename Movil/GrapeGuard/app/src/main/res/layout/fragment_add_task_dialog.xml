@@ -10,7 +10,7 @@
         android:id="@+id/tareaEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Tarea"
+        android:hint="@string/hint_tarea"
         android:inputType="text" />
 
     <Spinner
@@ -24,21 +24,21 @@
         android:id="@+id/recordatorioEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Seleccionar Recordatorio"
+        android:hint="@string/hint_seleccionar_recordatorio"
         android:focusable="false" />
 
     <EditText
         android:id="@+id/fechaRealizacionEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Seleccionar Fecha de Realización"
+        android:hint="@string/hint_seleccionar_fecha_realizacion"
         android:focusable="false" />
 
     <TextView
         android:id="@+id/fechaRealizacionTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Fecha de Realización"
+        android:hint="@string/hint_fecha_realizacion"
         android:visibility="gone"/>
 
     <LinearLayout
@@ -52,13 +52,13 @@
             android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancelar" />
+            android:text="@string/button_cancelarTarea" />
 
         <Button
             android:id="@+id/addButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Añadir"
+            android:text="@string/button_anadirTarea"
             android:layout_marginStart="8dp" />
     </LinearLayout>
 

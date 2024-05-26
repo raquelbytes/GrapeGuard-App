@@ -46,16 +46,6 @@ public class VinedoDTO {
         return target;
     }
 
-   /* public static Vinedo fromEntity(VinedoDTO source) {
-        Vinedo target = new Vinedo();
-        target.setId(source.getId());
-        target.setUsuario(source.getUsuario());
-        target.setNombre(source.getNombre());
-        target.setUbicacion(source.getUbicacion());
-        target.setFechaPlantacion(source.getFechaPlantacion());
-        target.setHectareas(source.getHectareas());
 
-        return target;
-    }*/
 }
 

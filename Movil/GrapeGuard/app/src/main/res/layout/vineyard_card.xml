@@ -26,7 +26,7 @@
                 android:id="@+id/vineyardNameTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nombre del Viñedo"
+                android:text="@string/vineyard_name_placeholder"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Ubicación del Viñedo"
+                android:text="@string/vineyard_location_placeholder"
                 android:textSize="16sp" />
         </LinearLayout>
 

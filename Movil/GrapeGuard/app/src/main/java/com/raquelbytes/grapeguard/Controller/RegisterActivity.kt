@@ -20,14 +20,17 @@ import com.raquelbytes.grapeguard.API.Repository.UsuarioRepository
 import com.raquelbytes.grapeguard.R
 import com.raquelbytes.grapeguard.Util.ImageHelper;
 
+// Clase para la actividad de registro de usuario
 class RegisterActivity : AppCompatActivity(), UserRegisterCallback {
 
-
+    // Declaración de variables de vistas
     private lateinit var email: EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.register_view)
+        setContentView(R.layout.register_view) // Establece el diseño de la actividad de registro
 
+        // Obtiene las referencias a los elementos de la interfaz de usuario
         val nombre = findViewById<EditText>(R.id.nombreEditText)
         val apellidos = findViewById<EditText>(R.id.apellidosEditText)
         email = findViewById<EditText>(R.id.emailEditText)
@@ -37,6 +40,7 @@ class RegisterActivity : AppCompatActivity(), UserRegisterCallback {
         val btnRegistro = findViewById<Button>(R.id.loginButton)
         val editTexts = listOf(nombre, apellidos, email, contrasena)
 
+        // Configura el listener para el botón de tomar foto
         btnFoto.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                 openCamera()
@@ -45,27 +49,34 @@ class RegisterActivity : AppCompatActivity(), UserRegisterCallback {
             }
         }
 
+        // Configura el listener para el botón de registro
         btnRegistro.setOnClickListener {
-            if (!comprobarVacio(editTexts)) return@setOnClickListener
+            // Verifica si algún campo está vacío o no cumple con las validaciones
+            if (!comprobarVacio(editTexts) || !isValidEmail(email.text.toString()) || !containsOnlyLetters(nombre.text.toString()) || !containsOnlyLetters(apellidos.text.toString()) || !isValidPassword(contrasena.text.toString())) {
+                return@setOnClickListener
+            }
 
+            // Crea un objeto Usuario con los datos ingresados por el usuario
             val usuario = Usuario(
                 nombre.text.toString().trim(),
                 apellidos.text.toString().trim(),
                 email.text.toString().trim(),
                 contrasena.text.toString().trim(),
-                ImageHelper.encodeImageViewToBase64(fotoPerfil)
-
+                ImageHelper.encodeImageViewToBase64(fotoPerfil) // Codifica la imagen del perfil a Base64
             )
+
+            // Envía la solicitud de registro del usuario al repositorio
             UsuarioRepository.registrarUsuario(this, usuario, this)
         }
-
     }
 
+    // Método para abrir la cámara
     private fun openCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         someActivityResultLauncher.launch(intent)
     }
 
+    // Método para verificar si algún campo de texto está vacío
     private fun comprobarVacio(editTexts: List<EditText>): Boolean {
         for (editText in editTexts) {
             if (editText.text.toString().isEmpty()) {
@@ -77,6 +88,7 @@ class RegisterActivity : AppCompatActivity(), UserRegisterCallback {
         return true
     }
 
+    // Callback para manejar el éxito en el registro de usuario
     override fun onUserRegisterSuccess(response: String) {
         Toast.makeText(this, response, Toast.LENGTH_LONG).show()
         val intentLogin = Intent(this, LoginActivity::class.java)
@@ -84,6 +96,7 @@ class RegisterActivity : AppCompatActivity(), UserRegisterCallback {
         finish()
     }
 
+    // Callback para manejar el fracaso en el registro de usuario
     override fun onUserRegisterFailed(error: String) {
         Toast.makeText(this, error, Toast.LENGTH_LONG).show()
         if (error.contains("El usuario ya existe")) {
@@ -91,6 +104,7 @@ class RegisterActivity : AppCompatActivity(), UserRegisterCallback {
         }
     }
 
+    // Callback para manejar el resultado de la actividad de la cámara
     private val someActivityResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -100,17 +114,18 @@ class RegisterActivity : AppCompatActivity(), UserRegisterCallback {
             val imageView = findViewById<ImageView>(R.id.fotoPerfil)
             imageView.setImageBitmap(imageBitmap)
         } else {
-            Toast.makeText(this, "Foto no capturada", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.toast_foto_no_capturada), Toast.LENGTH_SHORT).show()
         }
     }
 
+    // Método para manejar el resultado de la solicitud de permisos
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == MY_CAMERA_PERMISSION_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openCamera()
             } else {
-                Toast.makeText(this, "Permiso de cámara denegado", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.toast_permiso_camara_denegado), Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -118,5 +133,21 @@ class RegisterActivity : AppCompatActivity(), UserRegisterCallback {
     companion object {
         private const val MY_CAMERA_PERMISSION_CODE = 100
         private const val REQUEST_TAKE_PHOTO = 101
+    }
+    // Función para validar el formato de correo electrónico
+    private fun isValidEmail(email: String): Boolean {
+        val emailRegex = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})"
+        return email.matches(emailRegex.toRegex())
+    }
+
+    // Función para validar que el texto no contenga números
+    private fun containsOnlyLetters(text: String): Boolean {
+        val letterRegex = "^[a-zA-Z]+\$"
+        return text.matches(letterRegex.toRegex())
+    }
+
+    // Función para validar la longitud de la contraseña
+    private fun isValidPassword(password: String): Boolean {
+        return password.length <= 16
     }
 }

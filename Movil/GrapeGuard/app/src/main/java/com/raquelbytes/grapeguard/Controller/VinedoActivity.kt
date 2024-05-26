@@ -1,9 +1,11 @@
 package com.raquelbytes.grapeguard.Controller
 
 import TareaAdapter
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TableLayout
 import android.widget.TableRow
@@ -21,6 +23,8 @@ import com.raquelbytes.grapeguard.API.Model.Vinedo
 import com.raquelbytes.grapeguard.API.Repository.CosechaRepository
 import com.raquelbytes.grapeguard.API.Repository.TareaRepository
 import com.raquelbytes.grapeguard.R
+import com.raquelbytes.grapeguard.SQLite.UsuarioDAO
+import com.raquelbytes.grapeguard.Util.ImageHelper
 
 class VinedoActivity : AppCompatActivity(), AddTaskDialogFragment.AddTaskDialogListener,  AddHarvestDialogFragment.AddHarvestDialogListener {
 
@@ -29,15 +33,29 @@ class VinedoActivity : AppCompatActivity(), AddTaskDialogFragment.AddTaskDialogL
                 setContentView(R.layout.vinedo_view)
 
                 val vinedo: Vinedo? = intent.getSerializableExtra("vinedo") as? Vinedo
+                val profileImageButton: ImageView = findViewById(R.id.profileImageView)
+
+
 
                 if (vinedo != null) {
                         val nombreTextView: TextView = findViewById(R.id.vineyardNameTextView)
                         val ubicacionTextView: TextView = findViewById(R.id.locationTextView)
+
                         nombreTextView.text = vinedo.nombre
                         ubicacionTextView.text = vinedo.ubicacion
 
                         val tableLayout: TableLayout = findViewById(R.id.tableLayout)
                         val vinedoId = vinedo.id ?: -1
+
+
+
+                        val foto = vinedo.usuario?.let { getFotoUsuario(it) };
+                        cargarFotoUsuarioEnBoton(profileImageButton,foto);
+                        profileImageButton.setOnClickListener {
+                                val intent = Intent(this, LogOutActivity::class.java)
+                                intent.putExtra("id_usuario", vinedo.usuario)
+                                startActivity(intent)
+                        }
 
                         CosechaRepository.obtenerCosechasPorVinedo(this, vinedoId, object : CosechaCallback {
                                 override fun onCosechasObtenidas(cosechas: List<Cosecha>) {
@@ -252,6 +270,28 @@ class VinedoActivity : AppCompatActivity(), AddTaskDialogFragment.AddTaskDialogL
                                         Log.e("Cosechas Error", errorMessage)
                                 }
                         })
+                }
+        }
+        private fun getFotoUsuario(id: Int): String? {
+                val usuarioDAO = UsuarioDAO(this)
+                val usuario = usuarioDAO.obtenerUsuario(id)
+                Log.e("usuario", usuario.toString()) // Agregamos un log para ver el valor de usuario
+
+                return usuario?.foto
+        }
+
+        private fun cargarFotoUsuarioEnBoton(imageView: ImageView, fotoUsuario: String?) {
+                if (fotoUsuario != null) {
+                        try {
+                                val decodedImage = ImageHelper.decodeBase64ToBitmap(fotoUsuario)
+                                imageView.setImageBitmap(decodedImage)
+                        } catch (ex: IllegalArgumentException) {
+                                Log.e("MainActivity", "Error al decodificar la imagen: ${ex.message}")
+                                imageView.setImageResource(R.drawable.defaultuserimage)
+                        }
+                } else {
+                        // Si fotoUsuario es nulo, carga una imagen por defecto
+                        imageView.setImageResource(R.drawable.defaultuserimage)
                 }
         }
 

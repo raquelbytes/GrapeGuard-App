@@ -5,7 +5,7 @@ import java.math.BigDecimal
 
 class Vinedo : Serializable {
     var id: Int? = null
-    var usuarioId: Int? = null
+    var usuario: Int? = null
     var nombre: String? = null
     var ubicacion: String? = null
     var fechaPlantacion: String? = null
@@ -13,9 +13,9 @@ class Vinedo : Serializable {
 
     constructor()
 
-    constructor(id: Int, usuarioId: Int, nombre: String, ubicacion: String, fechaPlantacion: String, hectareas: BigDecimal) {
+    constructor(id: Int, usuario: Int, nombre: String, ubicacion: String, fechaPlantacion: String, hectareas: BigDecimal) {
         this.id = id
-        this.usuarioId = usuarioId
+        this.usuario = usuario
         this.nombre = nombre
         this.ubicacion = ubicacion
         this.fechaPlantacion = fechaPlantacion

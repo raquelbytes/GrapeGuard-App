@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -23,11 +22,9 @@
             app:civ_border_width="2dp"
             app:layout_constraintBottom_toTopOf="@+id/appNameTextView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-
 
         <TextView
             android:id="@+id/appNameTextView"
@@ -52,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="29dp"
             android:fontFamily="@font/leaguespartanbold"
-            android:text="Registrarse"
+            android:text="@string/logout_title"
             android:textColor="#1E1F22"
             android:textSize="35sp"
             app:layout_constraintBottom_toTopOf="@+id/nombreEditText"
@@ -69,7 +66,7 @@
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="17dp"
-            android:text="Nombre:"
+            android:text="@string/name_label"
             android:textColor="#000000"
             app:layout_constraintBottom_toTopOf="@+id/apellidosTextView"
             app:layout_constraintEnd_toStartOf="@+id/nombreEditText"
@@ -83,7 +80,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
             android:background="#FFFFFF"
-            android:hint="Nombre"
+            android:hint="@string/name_hint"
             android:inputType="textEmailAddress"
             app:layout_constraintBottom_toBottomOf="@+id/nombreTextView"
             app:layout_constraintEnd_toEndOf="parent"
@@ -97,7 +94,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="19dp"
-            android:text="Apellidos:"
+            android:text="@string/last_name_label"
             android:textColor="#000000"
             app:layout_constraintBottom_toTopOf="@+id/emailLabelTextView"
             app:layout_constraintEnd_toStartOf="@+id/apellidosEditText"
@@ -110,7 +107,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="#FFFFFF"
-            android:hint="Apellidos"
+            android:hint="@string/last_name_hint"
             android:inputType="textEmailAddress"
             app:layout_constraintBottom_toBottomOf="@+id/apellidosTextView"
             app:layout_constraintEnd_toEndOf="@id/nombreEditText"
@@ -124,7 +121,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="48dp"
             android:layout_marginBottom="19dp"
-            android:text="Email:"
+            android:text="@string/email_label"
             android:textColor="#000000"
             app:layout_constraintBottom_toTopOf="@+id/passwordLabelTextView"
             app:layout_constraintEnd_toStartOf="@+id/emailEditText"
@@ -137,7 +134,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="#FFFFFF"
-            android:hint="Email"
+            android:hint="@string/email_hint"
             android:inputType="textEmailAddress"
             app:layout_constraintBottom_toBottomOf="@+id/emailLabelTextView"
             app:layout_constraintEnd_toEndOf="@id/apellidosEditText"
@@ -151,7 +148,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="11dp"
             android:layout_marginBottom="20dp"
-            android:text="Contraseña:"
+            android:text="@string/password_label"
             android:textColor="#000000"
             app:layout_constraintBottom_toTopOf="@+id/fotoPerfil"
             app:layout_constraintEnd_toStartOf="@+id/passwordEditText"
@@ -164,32 +161,26 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="#FFFFFF"
-            android:hint="Contraseña"
+            android:hint="@string/password_hint"
             android:inputType="textPassword"
             app:layout_constraintBottom_toBottomOf="@+id/passwordLabelTextView"
             app:layout_constraintEnd_toEndOf="@id/emailEditText"
             app:layout_constraintStart_toStartOf="@id/emailEditText"
             app:layout_constraintTop_toTopOf="@id/passwordLabelTextView" />
 
+        <!-- Botón de registro -->
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/fotoPerfil"
-            android:layout_width="114dp"
-            android:layout_height="114dp"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="60dp"
+            android:layout_width="103dp"
+            android:layout_height="92dp"
+            android:layout_marginStart="68dp"
+            android:layout_marginTop="24dp"
             android:src="@drawable/defaultuserimage"
             app:civ_border_color="#FFFFFF"
             app:civ_border_width="2dp"
-            app:layout_constraintBottom_toTopOf="@+id/loginButton"
-            app:layout_constraintEnd_toEndOf="@+id/btnSacarFoto"
-            app:layout_constraintEnd_toStartOf="@+id/btnSacarFoto"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/passwordLabelTextView" />
-
-        <!-- Botón de registro -->
 
         <Button
             android:id="@+id/btnSacarFoto"
@@ -198,29 +189,71 @@
             android:layout_marginTop="105dp"
             android:layout_marginEnd="48dp"
             android:backgroundTint="#8BD767"
-            android:text="Sacar Foto"
+            android:text="@string/take_photo"
             android:textColor="#000000"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/fotoPerfil"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.682"
             app:layout_constraintStart_toEndOf="@+id/fotoPerfil"
-            app:layout_constraintTop_toBottomOf="@+id/passwordEditText" />
+            app:layout_constraintTop_toBottomOf="@+id/passwordEditText"
+            app:layout_constraintVertical_bias="1.0" />
 
         <Button
             android:id="@+id/saveChanges"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="32dp"
             android:backgroundTint="#8BD767"
-            android:text="Guardar"
+            android:text="@string/save"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnSacarFoto" />
+
+        <Button
+            android:id="@+id/cerrarSesion"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="#8BD767"
+            android:text="@string/logout"
             android:textColor="#000000"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnSacarFoto" />
+            app:layout_constraintTop_toBottomOf="@+id/saveChanges" />
+
+        <ImageButton
+            android:id="@+id/buttonChangeToGalician"
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:src="@drawable/gl"
+            android:contentDescription="@string/change_to_galician"
+            android:background="?attr/selectableItemBackground"
+            android:scaleType="centerInside"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageButton
+            android:id="@+id/buttonChangeToSpanish"
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:src="@drawable/es"
+            android:contentDescription="@string/change_to_spanish"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginTop="16dp"
+            android:scaleType="centerInside"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/buttonChangeToGalician" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

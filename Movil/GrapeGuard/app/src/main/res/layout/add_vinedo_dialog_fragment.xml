@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,28 +10,28 @@
         android:id="@+id/nombreEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nombre"
+        android:hint="@string/hint_nombre"
         android:inputType="text" />
 
     <EditText
         android:id="@+id/ubicacionEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Ubicación"
+        android:hint="@string/hint_ubicacion"
         android:inputType="text" />
 
     <EditText
         android:id="@+id/fechaPlantacionEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Seleccionar Fecha de Plantación"
+        android:hint="@string/hint_fecha_plantacion"
         android:focusable="false" />
 
     <EditText
         android:id="@+id/hectareasEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Hectáreas"
+        android:hint="@string/hint_hectareas"
         android:inputType="numberDecimal" />
 
     <LinearLayout
@@ -46,13 +45,13 @@
             android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancelar" />
+            android:text="@string/button_cancelarVinedo" />
 
         <Button
             android:id="@+id/addButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Añadir"
+            android:text="@string/button_anadir"
             android:layout_marginStart="8dp" />
     </LinearLayout>
 

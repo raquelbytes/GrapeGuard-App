@@ -1,17 +1,20 @@
 package com.raquelbytes.grapeguard.Controller
 
 import EncryptionUtil
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.raquelbytes.grapeguard.API.Interface.VinedoCallback
@@ -20,33 +23,42 @@ import com.raquelbytes.grapeguard.API.Model.Usuario
 import com.raquelbytes.grapeguard.API.Model.Vinedo
 import com.raquelbytes.grapeguard.API.Repository.VinedoRepository
 import com.raquelbytes.grapeguard.R
-
+import com.raquelbytes.grapeguard.SQLite.UsuarioDAO
+import com.raquelbytes.grapeguard.SQLite.UsuarioDbHelper
+import com.raquelbytes.grapeguard.Util.ImageHelper
 
 class MainActivity : AppCompatActivity(), AddVinedoDialogFragment.AddVinedoDialogListener {
 
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var dbHelper: UsuarioDbHelper
+    private var idUsuario: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.vinedos_view)
+        createNotificationChannel()
 
         sharedPreferences = getSharedPreferences("preferencias", Context.MODE_PRIVATE)
+        dbHelper = UsuarioDbHelper(this)
 
-        val idUsuario = getUserIdFromIntentOrPreferences()
-        val urlImagenPerfil = getUserImageFromIntentOrPreferences()
+        idUsuario = getUsuarioId()
+        Log.e("idUsuario", idUsuario.toString())
 
         if (idUsuario == null || idUsuario == -1) {
-            Log.e("com.raquelbytes.grapeguard.Controller.MainActivity", "ID de usuario no válido")
+            Log.e("MainActivity", "ID de usuario no válido")
             return
         }
 
-        val profileImageView: ImageView = findViewById(R.id.profileImageView)
-        Glide.with(this)
-            .load(urlImagenPerfil)
-            .placeholder(R.drawable.defaultuserimage)
-            .circleCrop()
-            .into(profileImageView)
+        val profileImageButton: ImageView = findViewById(R.id.profileImageView)
+        val fotoUsuario = getFotoUsuario(idUsuario!!)
+        Log.e("fotoUsuario", fotoUsuario ?: "null") // Agregamos un log para ver el valor de fotoUsuario
+        cargarFotoUsuarioEnBoton(profileImageButton, fotoUsuario)
+
+        profileImageButton.setOnClickListener {
+            val intent = Intent(this, LogOutActivity::class.java)
+            intent.putExtra("id_usuario", idUsuario)
+            startActivity(intent)
+        }
 
         val vineyardContainer: LinearLayout = findViewById(R.id.vineyardContainer)
         val addVineyardButton: Button = findViewById(R.id.add_vinedo_button)
@@ -57,77 +69,84 @@ class MainActivity : AppCompatActivity(), AddVinedoDialogFragment.AddVinedoDialo
             dialog.show(supportFragmentManager, "AddVineyardDialogFragment")
         }
 
-        loadVineyards(idUsuario, vineyardContainer)
+        loadVineyards(idUsuario!!, vineyardContainer)
     }
 
-    private fun getUserIdFromIntentOrPreferences(): Int? {
-        val idUsuario = intent.getIntExtra("id_usuario", -1)
-
-        if (idUsuario != -1) {
-            return idUsuario
-        }
-
+    private fun getUsuarioId(): Int? {
         val usuarioEncriptado = sharedPreferences.getString("Usuario", null)
+        Log.e("usuarioEncriptado", usuarioEncriptado ?: "null")
 
-        return if (usuarioEncriptado != null) {
-            try {
+        if (usuarioEncriptado != null) {
+            return try {
                 val usuarioJson = EncryptionUtil.desencriptar(usuarioEncriptado, "ejemploadmin123")
                 val usuario = Gson().fromJson(usuarioJson, Usuario::class.java)
+                Log.e("usuarioDesencriptado", usuario.nombre + usuario.id_usuario + usuario.contrasena)
                 usuario.id_usuario
             } catch (ex: JsonSyntaxException) {
-                Log.e("com.raquelbytes.grapeguard.Controller.MainActivity", "Error de sintaxis JSON al desencriptar usuario: ${ex.message}")
+                Log.e("MainActivity", "Error de sintaxis JSON al desencriptar usuario: ${ex.message}")
                 null
             } catch (ex: Exception) {
-                Log.e("com.raquelbytes.grapeguard.Controller.MainActivity", "Error al desencriptar usuario: ${ex.message}")
+                Log.e("MainActivity", "Error al desencriptar usuario: ${ex.message}")
                 null
             }
         } else {
-            Log.e("com.raquelbytes.grapeguard.Controller.MainActivity", "No se encontró usuario en las preferencias")
-            null
+            val idUsuarioIntent = intent.getIntExtra("id_usuario", -1)
+            return if (idUsuarioIntent != -1) {
+                idUsuarioIntent
+            } else {
+                null
+            }
         }
     }
-    private fun getUserImageFromIntentOrPreferences(): String? {
-        val urlImagenPerfil = intent.getStringExtra("url_imagen_perfil")
 
-        if (urlImagenPerfil != null) {
-            return urlImagenPerfil
-        }
+    private fun getFotoUsuario(id: Int): String? {
+        val usuarioDAO = UsuarioDAO(this)
+        val usuario = usuarioDAO.obtenerUsuario(id)
+        Log.e("usuario", usuario.toString()) // Agregamos un log para ver el valor de usuario
 
-        val usuarioEncriptado = sharedPreferences.getString("Usuario", null)
+        return usuario?.foto
+    }
 
-        return if (usuarioEncriptado != null) {
+    private fun cargarFotoUsuarioEnBoton(imageView: ImageView, fotoUsuario: String?) {
+        if (fotoUsuario != null) {
             try {
-                val usuarioJson = EncryptionUtil.desencriptar(usuarioEncriptado, "ejemploadmin123")
-                val usuario = Gson().fromJson(usuarioJson, Usuario::class.java)
-                usuario.foto
-            } catch (ex: JsonSyntaxException) {
-                Log.e("com.raquelbytes.grapeguard.Controller.MainActivity", "Error de sintaxis JSON al desencriptar usuario: ${ex.message}")
-                null
-            } catch (ex: Exception) {
-                Log.e("com.raquelbytes.grapeguard.Controller.MainActivity", "Error al desencriptar usuario: ${ex.message}")
-                null
+                val decodedImage = ImageHelper.decodeBase64ToBitmap(fotoUsuario)
+                imageView.setImageBitmap(decodedImage)
+            } catch (ex: IllegalArgumentException) {
+                Log.e("MainActivity", "Error al decodificar la imagen: ${ex.message}")
+                imageView.setImageResource(R.drawable.defaultuserimage)
             }
         } else {
-            Log.e("com.raquelbytes.grapeguard.Controller.MainActivity", "No se encontró usuario en las preferencias")
-            null
+            // Si fotoUsuario es nulo, carga una imagen por defecto
+            imageView.setImageResource(R.drawable.defaultuserimage)
         }
     }
 
     private fun loadVineyards(idUsuario: Int, vineyardContainer: LinearLayout) {
+        // Limpiar el contenedor antes de cargar los viñedos
+        vineyardContainer.removeAllViews()
+
         VinedoRepository.obtenerVinedosPorUsuario(this, idUsuario, object : VinedosCallback {
             override fun onVinedosObtenidos(vinedos: List<Vinedo>) {
                 for (vinedo in vinedos) {
-                    val cardView = layoutInflater.inflate(R.layout.vineyard_card, null) as LinearLayout
-                    val vineyardNameTextView: TextView = cardView.findViewById(R.id.vineyardNameTextView)
-                    val locationTextView: TextView = cardView.findViewById(R.id.locationTextView)
-                    vineyardNameTextView.text = vinedo.nombre
-                    locationTextView.text = vinedo.ubicacion
-                    vineyardContainer.addView(cardView)
+                    // Verificar si el viñedo ya está presente en el contenedor
+                    val vineyardExists = vineyardContainer.findViewWithTag<View>(vinedo.id)
+                    if (vineyardExists == null) {
+                        val cardView = layoutInflater.inflate(R.layout.vineyard_card, null) as LinearLayout
+                        val vineyardNameTextView: TextView = cardView.findViewById(R.id.vineyardNameTextView)
+                        val locationTextView: TextView = cardView.findViewById(R.id.locationTextView)
+                        vineyardNameTextView.text = vinedo.nombre
+                        locationTextView.text = vinedo.ubicacion
+                        vineyardContainer.addView(cardView)
 
-                    cardView.setOnClickListener {
-                        val intent = Intent(this@MainActivity, VinedoActivity::class.java)
-                        intent.putExtra("vinedo", vinedo)
-                        startActivity(intent)
+                        cardView.tag = vinedo.id // Agregar una etiqueta con el ID del viñedo
+
+                        cardView.setOnClickListener {
+                            val intent = Intent(this@MainActivity, VinedoActivity::class.java)
+                            intent.putExtra("vinedo", vinedo)
+                            Log.e("Vinedo", vinedo.usuario.toString())
+                            startActivity(intent)
+                        }
                     }
                 }
             }
@@ -138,23 +157,33 @@ class MainActivity : AppCompatActivity(), AddVinedoDialogFragment.AddVinedoDialo
         })
     }
 
-    override fun onVinedoAdded(vinedo: Vinedo) {
-        val idUsuario = getUserIdFromIntentOrPreferences() ?: return
-        Log.e("prefs Error", idUsuario.toString());
 
+    override fun onVinedoAdded(vinedo: Vinedo) {
+        val idUsuario = this.idUsuario ?: return
 
         VinedoRepository.agregarNuevoVinedo(this, idUsuario, vinedo, object : VinedoCallback {
-                override fun onVinedoAgregado(response: String) {
-                    Log.d("Vinedo agregado", response)
-                    val vineyardContainer: LinearLayout = findViewById(R.id.vineyardContainer)
-                    loadVineyards(idUsuario, vineyardContainer)
-                }
-
-                override fun onVinedoError(errorMessage: String) {
-                    Log.e("Error al agregar viñedo", errorMessage)
-                }
+            override fun onVinedoAgregado(response: String) {
+                Log.d("Vinedo agregado", response)
+                val vineyardContainer: LinearLayout = findViewById(R.id.vineyardContainer)
+                loadVineyards(idUsuario, vineyardContainer)
             }
-        )
+
+            override fun onVinedoError(errorMessage: String) {
+                Log.e("Error al agregar viñedo", errorMessage)
+            }
+        })
+    }
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Task Reminders"
+            val descriptionText = "Channel for task reminders"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(AddTaskDialogFragment.MY_CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 
 }

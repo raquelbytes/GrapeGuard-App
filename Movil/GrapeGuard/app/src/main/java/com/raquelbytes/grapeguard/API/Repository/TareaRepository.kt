@@ -17,6 +17,7 @@ import com.raquelbytes.grapeguard.API.Interface.AgregarTareaCallback
 import com.raquelbytes.grapeguard.API.Interface.BorrarTareaCallback
 import com.raquelbytes.grapeguard.API.Interface.TareaCallback
 import com.raquelbytes.grapeguard.API.Model.Tarea
+import com.raquelbytes.grapeguard.Util.ApiMap
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.text.ParseException
@@ -28,7 +29,7 @@ class TareaRepository {
     companion object {
 
         fun obtenerTareasPorVinedo(context: Context, idVinedo: Int, callback: TareaCallback) {
-            val url = "http://192.168.1.141:8080/tarea/vinedo/$idVinedo"
+            val url = "${ApiMap.BASE_URL}${ApiMap.TAREA_POR_VINEDO_ID.replace("{idVinedo}", idVinedo.toString())}"
             val stringRequest = object : StringRequest(
                 Request.Method.GET, url,
                 { response ->
@@ -98,7 +99,7 @@ class TareaRepository {
             queue.add(stringRequest)
         }
         fun consultarTareasPendientesPorVinedo(context: Context, idVinedo: Int, callback: TareaCallback) {
-            val url = "http://192.168.1.132:8080/tarea/vinedo/$idVinedo/pendientes"
+            val url = "${ApiMap.BASE_URL}${ApiMap.TAREA_PENDIENTES_POR_VINEDO_ID.replace("{idVinedo}", idVinedo.toString())}"
             val stringRequest = StringRequest(
                 Request.Method.GET, url,
                 { response ->
@@ -130,7 +131,7 @@ class TareaRepository {
             queue.add(stringRequest)
         }
         fun consultarTareasTerminadasPorVinedo(context: Context, idVinedo: Int, callback: TareaCallback) {
-            val url = "http://192.168.1.132:8080/tarea/vinedo/$idVinedo/terminadas"
+            val url = "${ApiMap.BASE_URL}${ApiMap.TAREA_TERMINADAS_POR_VINEDO_ID.replace("{idVinedo}", idVinedo.toString())}"
             val stringRequest = StringRequest(
                 Request.Method.GET, url,
                 { response ->
@@ -162,7 +163,7 @@ class TareaRepository {
             queue.add(stringRequest)
         }
         fun borrarTareaDelVinedo(context: Context, idTarea: Int, callback: BorrarTareaCallback) {
-            val url = "http://192.168.1.132:8080/tarea/delete/$idTarea"
+            val url = "${ApiMap.BASE_URL}${ApiMap.TAREA_ELIMINAR_POR_ID.replace("{idTarea}", idTarea.toString())}"
             val stringRequest = StringRequest(
                 Request.Method.DELETE, url,
                 { response ->
@@ -186,7 +187,7 @@ class TareaRepository {
             queue.add(stringRequest)
         }
         fun agregarTareaAlVinedo(context: Context, idVinedo: Int, nuevaTarea: Tarea, callback: AgregarTareaCallback) {
-            val url = "http://192.168.1.132:8080/tarea/vinedo/$idVinedo"
+            val url = "${ApiMap.BASE_URL}${ApiMap.TAREA_AGREGAR_POR_VINEDO_ID.replace("{idVinedo}", idVinedo.toString())}"
             val requestBody = Gson().toJson(nuevaTarea)
 
             val stringRequest = object : StringRequest(
