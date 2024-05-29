@@ -21,6 +21,11 @@
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <<!-- debes incluir todas las clases que mapeas-->
         <!--         <mapping class="modelo.vo.clase"/>        -->
+        <mapping class="modelo.vo.Nota"/>
+        <mapping class="modelo.vo.Vinedo"/>
+        <mapping class="modelo.vo.Usuario"/>
+        <mapping class="modelo.vo.Tratamiento"/>
+        <mapping class="modelo.vo.VinedoTratamiento"/>
         
     </session-factory>	
 </hibernate-configuration>
