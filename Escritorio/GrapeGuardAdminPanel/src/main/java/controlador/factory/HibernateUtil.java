@@ -1,5 +1,10 @@
 package controlador.factory;
 
+import modelo.dao.NotaDAO;
+import modelo.dao.TratamientoDAO;
+import modelo.dao.UsuarioDAO;
+import modelo.dao.VinedoDAO;
+import modelo.dao.VinedoTratamientoDAO;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -44,4 +49,23 @@ public class HibernateUtil {
         }
     }
     /************************ INCORPORA LOS MÉTODOS PARA CREAR LOS OBJETOS DAO ********/
+    
+     public static NotaDAO getNotaDAO() {
+        return new NotaDAO();
+    }
+      public static TratamientoDAO getTratamientoDAO() {
+        return new TratamientoDAO();
+    }
+
+      public static VinedoDAO getVinedoDAO() {
+        return new VinedoDAO();
+    }
+
+      public static VinedoTratamientoDAO getVinedoTratamientoDAO() {
+        return new VinedoTratamientoDAO();
+    }
+      public static UsuarioDAO getUsuarioDAO() {
+        return new UsuarioDAO();
+    }
+
 }

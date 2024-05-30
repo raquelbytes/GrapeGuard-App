@@ -39,7 +39,7 @@ public class Vinedo implements Serializable {
     @Column(name = "hectareas")
     private Double hectareas;
 
-    @OneToMany(mappedBy = "vinedo", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "vinedo", fetch = FetchType.LAZY ,cascade = CascadeType.REMOVE)
     private List<Nota> notas = new ArrayList<>();
 
     @OneToMany(mappedBy = "vinedo", fetch = FetchType.LAZY)

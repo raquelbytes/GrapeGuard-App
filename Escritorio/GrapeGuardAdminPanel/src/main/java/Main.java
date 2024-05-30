@@ -7,7 +7,7 @@
  *
  * @author Acceso a datos
  */
-public class UD3_ProyectoBase {
+public class Main {
 
     public static void main(String[] args) {
         

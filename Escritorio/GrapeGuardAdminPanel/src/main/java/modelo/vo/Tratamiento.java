@@ -38,7 +38,7 @@ public class Tratamiento implements Serializable {
     @JoinColumn(name = "ID_usuario", nullable = false)
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "tratamiento", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tratamiento", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     private List<VinedoTratamiento> vinedoTratamientos = new ArrayList<>();
 
     public Tratamiento() {
