@@ -1,20 +1,17 @@
-
 package modelo.dao;
 
 /**
  *
  * @author raquel
  */
-
-
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 import modelo.vo.Tratamiento;
 import modelo.vo.Usuario;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-
 
 public class TratamientoDAO {
 
@@ -30,41 +27,6 @@ public class TratamientoDAO {
         }
     }
 
-    public void cargarTabla(Session session, Usuario usuario, DefaultTableModel modeloTabla) {
-        Tratamiento t;
-        modeloTabla.setRowCount(0);
-        Iterator<Tratamiento> it = usuario.getTratamientos().iterator();
-        while (it.hasNext()) {
-            modeloTabla.setRowCount(modeloTabla.getRowCount() + 1);
-            t = it.next();
-            modeloTabla.setValueAt(t.getId(), modeloTabla.getRowCount() - 1, 0);
-            modeloTabla.setValueAt(t.getNombre(), modeloTabla.getRowCount() - 1, 1);
-            modeloTabla.setValueAt(t.getCantidad(), modeloTabla.getRowCount() - 1, 2);
-            modeloTabla.setValueAt(t.getPrecioUnitario(), modeloTabla.getRowCount() - 1, 3);
-            modeloTabla.setValueAt(t.isEnPosesion(), modeloTabla.getRowCount() - 1, 4);
-        }
-    }
-
-    public void recargarTabla(Session session, Usuario usuario, DefaultTableModel modeloTabla) {
-        Tratamiento t;
-        modeloTabla.setRowCount(0);
-
-        Query q = session.createQuery("from Tratamiento t where t.usuario.ID_usuario = :usuarioId");
-        q.setParameter("usuarioId", usuario.getId());
-
-        Iterator<Tratamiento> it = q.list().iterator();
-
-        while (it.hasNext()) {
-            modeloTabla.setRowCount(modeloTabla.getRowCount() + 1);
-            t = it.next();
-            modeloTabla.setValueAt(t.getId(), modeloTabla.getRowCount() - 1, 0);
-            modeloTabla.setValueAt(t.getNombre(), modeloTabla.getRowCount() - 1, 1);
-            modeloTabla.setValueAt(t.getCantidad(), modeloTabla.getRowCount() - 1, 2);
-            modeloTabla.setValueAt(t.getPrecioUnitario(), modeloTabla.getRowCount() - 1, 3);
-            modeloTabla.setValueAt(t.isEnPosesion(), modeloTabla.getRowCount() - 1, 4);
-        }
-    }
-
     public Tratamiento getTratamiento(Session session, int tratamientoId) throws Exception {
         return session.get(Tratamiento.class, tratamientoId);
     }
@@ -75,13 +37,8 @@ public class TratamientoDAO {
         return (Tratamiento) q.uniqueResult();
     }
 
-    public void insertar(Session session, Usuario usuario, String nombre, int cantidad, double precioUnitario, boolean enPosesion) {
-        Tratamiento t = new Tratamiento();
-        t.setUsuario(usuario);
-        t.setNombre(nombre);
-        t.setCantidad(cantidad);
-        t.setPrecioUnitario(precioUnitario);
-        t.setEnPosesion(enPosesion);
+    public void insertar(Session session, Tratamiento t) throws Exception {
+
         session.save(t);
     }
 
@@ -89,12 +46,42 @@ public class TratamientoDAO {
         session.delete(t);
     }
 
-    public void modificar(Session session, Tratamiento t, String nombre, int cantidad, double precioUnitario, boolean enPosesion) {
-        t.setNombre(nombre);
-        t.setCantidad(cantidad);
-        t.setPrecioUnitario(precioUnitario);
-        t.setEnPosesion(enPosesion);
-        session.update(t);
-    }
-}
+    public Tratamiento modificar(Session session, Tratamiento t, String nombre, String cantidad, String precioUnitario) throws Exception {
 
+        if (!nombre.isEmpty()) {
+            t.setNombre(nombre);
+        }
+        if (!cantidad.isEmpty()) {
+            int cant = Integer.valueOf(cantidad);
+            t.setCantidad(cant);
+        }
+
+        if (!precioUnitario.isEmpty()) {
+            Double precioUn = Double.valueOf(precioUnitario);
+            t.setPrecioUnitario(precioUn);
+        }
+        session.update(t);
+        return t;
+
+    }
+
+    public List<Tratamiento> getAllTratamientos(Session session) {
+        return session.createQuery("from Tratamiento", Tratamiento.class).list();
+    }
+
+    public void cargarCombo(Session session, DefaultComboBoxModel modeloCombo) throws Exception {
+        modeloCombo.removeAllElements();
+        Tratamiento t;
+        Query q = session.createQuery("from Tratamiento t");
+
+        List<Tratamiento> listaTratamientos = q.list();
+        Iterator it = listaTratamientos.iterator();
+
+        while (it.hasNext()) {
+            System.out.println(it);
+            modeloCombo.addElement(it.next());
+        }
+
+    }
+
+}

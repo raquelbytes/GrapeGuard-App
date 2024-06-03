@@ -4,17 +4,31 @@
  */
 package vista;
 
+import Util.VinedoTableModel;
+import com.toedter.calendar.JDateChooser;
+import controlador.VinedoController;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import modelo.vo.Usuario;
+import modelo.vo.Vinedo;
+
 /**
  *
  * @author raque
  */
 public class VinedoView extends javax.swing.JFrame {
+     public static VinedoController controlador = new VinedoController();
 
     /**
      * Creates new form MainView
      */
     public VinedoView() {
         initComponents();
+         controlador.iniciaSession();
     }
 
     /**
@@ -43,12 +57,22 @@ public class VinedoView extends javax.swing.JFrame {
         btnAdd = new javax.swing.JButton();
         btnBorrar = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
-        ComboUsuario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        ComboUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComboUsuarioActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Nombre");
 
@@ -128,23 +152,25 @@ public class VinedoView extends javax.swing.JFrame {
         jScrollPane1.setViewportView(Tabla);
 
         btnAdd.setText("Añadir");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
         btnBorrar.setText("Borrar");
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarActionPerformed(evt);
+            }
+        });
 
         btnModificar.setText("Modificar");
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
             }
-        ));
-        jScrollPane2.setViewportView(jTable1);
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -162,9 +188,7 @@ public class VinedoView extends javax.swing.JFrame {
                         .addComponent(btnModificar))
                     .addComponent(ComboUsuario, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(107, 107, 107)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40))
         );
         layout.setVerticalGroup(
@@ -172,10 +196,7 @@ public class VinedoView extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(ComboUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -191,6 +212,74 @@ public class VinedoView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+       controlador.cargarComboUsuarios();
+     controlador.getAllVinedosByUsuario();
+       controlador.actualizarSuma();
+        
+    }//GEN-LAST:event_formWindowOpened
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+          controlador.cerrarSession();
+        
+    }//GEN-LAST:event_formWindowClosed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // TODO add your handling code here:
+        controlador.insertarVinedo();
+         controlador.actualizarSuma();
+     
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+        // TODO add your handling code here:
+               int filaSeleccionada = Tabla.getSelectedRow();
+    if (filaSeleccionada >= 0) {
+        VinedoTableModel modelo = (VinedoTableModel) Tabla.getModel();
+        Vinedo vinedoSeleccionada = modelo.getVinedoAt(filaSeleccionada);
+        controlador.eliminarVinedo(vinedoSeleccionada,filaSeleccionada);
+        controlador.actualizarSuma();
+    } else {
+        JOptionPane.showMessageDialog(this, "Seleccione un viñedo para borrar.", "Mensaje", JOptionPane.WARNING_MESSAGE);
+    }
+        
+    }//GEN-LAST:event_btnBorrarActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        // TODO add your handling code here:
+                       int filaSeleccionada = Tabla.getSelectedRow();
+    if (filaSeleccionada >= 0) {
+           VinedoTableModel modelo = (VinedoTableModel) Tabla.getModel();
+        Vinedo vinedoSeleccionada = modelo.getVinedoAt(filaSeleccionada);
+         controlador.actualizarVinedo(vinedoSeleccionada,filaSeleccionada);
+           controlador.actualizarSuma();
+        
+    } else {
+        JOptionPane.showMessageDialog(this, "Seleccione una nota para modificar.", "Mensaje", JOptionPane.WARNING_MESSAGE);
+    }
+      
+        
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void ComboUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboUsuarioActionPerformed
+        // TODO add your handling code here:
+         controlador.actualizarSuma();
+           controlador.getAllVinedosByUsuario();
+    }//GEN-LAST:event_ComboUsuarioActionPerformed
+
+      private void TablaMouseClicked(java.awt.event.MouseEvent evt) {                                   
+        // TODO add your handling code here:
+      int filaSeleccionada = Tabla.rowAtPoint(evt.getPoint());
+    
+    if (filaSeleccionada >= 0) {
+        VinedoTableModel modelo = (VinedoTableModel) Tabla.getModel();
+        Vinedo vinedoSeleccionada = modelo.getVinedoAt(filaSeleccionada);
+        System.out.println("Viñedo seleccionado: " + vinedoSeleccionada);
+    }
+    
+    } 
     /**
      * @param args the command line arguments
      */
@@ -227,8 +316,92 @@ public class VinedoView extends javax.swing.JFrame {
         });
     }
 
+    public JComboBox<Usuario> getComboUsuario() {
+        return ComboUsuario;
+    }
+
+    public void setComboUsuario(JComboBox<Usuario> ComboUsuario) {
+        this.ComboUsuario = ComboUsuario;
+    }
+
+    public JTable getTabla() {
+        return Tabla;
+    }
+
+    public void setTabla(JTable Tabla) {
+        this.Tabla = Tabla;
+    }
+
+    public JButton getBtnAdd() {
+        return btnAdd;
+    }
+
+    public void setBtnAdd(JButton btnAdd) {
+        this.btnAdd = btnAdd;
+    }
+
+    public JButton getBtnBorrar() {
+        return btnBorrar;
+    }
+
+    public void setBtnBorrar(JButton btnBorrar) {
+        this.btnBorrar = btnBorrar;
+    }
+
+    public JButton getBtnModificar() {
+        return btnModificar;
+    }
+
+    public void setBtnModificar(JButton btnModificar) {
+        this.btnModificar = btnModificar;
+    }
+
+    public JDateChooser getjDateChooser1() {
+        return jDateChooser1;
+    }
+
+    public void setjDateChooser1(JDateChooser jDateChooser1) {
+        this.jDateChooser1 = jDateChooser1;
+    }
+
+    public JTextField getTxtHectareas() {
+        return txtHectareas;
+    }
+
+    public void setTxtHectareas(JTextField txtHectareas) {
+        this.txtHectareas = txtHectareas;
+    }
+
+    public JTextField getTxtNombre() {
+        return txtNombre;
+    }
+
+    public void setTxtNombre(JTextField txtNombre) {
+        this.txtNombre = txtNombre;
+    }
+
+    public JLabel getTxtSuma() {
+        return txtSuma;
+    }
+
+    public void setTxtSuma(JLabel txtSuma) {
+        this.txtSuma = txtSuma;
+    }
+
+    public JTextField getTxtUbicacion() {
+        return txtUbicacion;
+    }
+
+    public void setTxtUbicacion(JTextField txtUbicacion) {
+        this.txtUbicacion = txtUbicacion;
+    }
+    
+
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> ComboUsuario;
+    private javax.swing.JComboBox<Usuario> ComboUsuario;
     private javax.swing.JPanel PanelFormulario;
     private javax.swing.JTable Tabla;
     private javax.swing.JButton btnAdd;
@@ -241,8 +414,6 @@ public class VinedoView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField txtHectareas;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JLabel txtSuma;

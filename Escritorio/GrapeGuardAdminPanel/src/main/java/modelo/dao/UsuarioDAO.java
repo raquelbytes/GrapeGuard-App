@@ -9,7 +9,9 @@ package modelo.dao;
  * @author raquel
  */
 
+import java.util.Iterator;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import modelo.vo.Usuario;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -32,6 +34,22 @@ public class UsuarioDAO {
     public List<Usuario> getAllUsuarios(Session session) throws Exception {
         Query q = session.createQuery("from Usuario");
         return q.list();
+    }
+    
+        public void cargarCombo(Session session, DefaultComboBoxModel modeloCombo) throws Exception {
+        modeloCombo.removeAllElements();
+        Usuario u;
+        Query q = session.createQuery("from Usuario u");
+
+        List<Usuario> listaVinedos = q.list(); 
+        Iterator it = listaVinedos.iterator();
+      
+
+        while (it.hasNext()) {
+            System.out.println(it);
+            modeloCombo.addElement(it.next());
+        }
+
     }
 }
 

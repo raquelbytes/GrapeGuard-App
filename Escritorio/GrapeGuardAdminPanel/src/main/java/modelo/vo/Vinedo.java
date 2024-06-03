@@ -13,7 +13,7 @@ import java.util.List;
 import javax.persistence.*;
 import lombok.*;
 
-@Data
+
 @Entity
 @Table(name = "Vinedo")
 public class Vinedo implements Serializable {
@@ -39,11 +39,17 @@ public class Vinedo implements Serializable {
     @Column(name = "hectareas")
     private Double hectareas;
 
-    @OneToMany(mappedBy = "vinedo", fetch = FetchType.LAZY ,cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "vinedo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Nota> notas = new ArrayList<>();
 
-    @OneToMany(mappedBy = "vinedo", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "vinedo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<VinedoTratamiento> tratamientos = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "vinedo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Cosecha> cosechas = new ArrayList<>();
+
+    @OneToMany(mappedBy = "vinedo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Tarea> tareas = new ArrayList<>();
 
     public Vinedo() {
     }
@@ -55,6 +61,95 @@ public class Vinedo implements Serializable {
         this.fechaPlantacion = fechaPlantacion;
         this.hectareas = hectareas;
     }
+
+    @Override
+    public String toString() {
+        return nombre ;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public List<Cosecha> getCosechas() {
+        return cosechas;
+    }
+
+    public void setCosechas(List<Cosecha> cosechas) {
+        this.cosechas = cosechas;
+    }
+
+    public List<Tarea> getTareas() {
+        return tareas;
+    }
+
+    public void setTareas(List<Tarea> tareas) {
+        this.tareas = tareas;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
+    public Date getFechaPlantacion() {
+        return fechaPlantacion;
+    }
+
+    public void setFechaPlantacion(Date fechaPlantacion) {
+        this.fechaPlantacion = fechaPlantacion;
+    }
+
+    public Double getHectareas() {
+        return hectareas;
+    }
+
+    public void setHectareas(Double hectareas) {
+        this.hectareas = hectareas;
+    }
+
+    public List<Nota> getNotas() {
+        return notas;
+    }
+
+    public void setNotas(List<Nota> notas) {
+        this.notas = notas;
+    }
+
+    public List<VinedoTratamiento> getTratamientos() {
+        return tratamientos;
+    }
+
+    public void setTratamientos(List<VinedoTratamiento> tratamientos) {
+        this.tratamientos = tratamientos;
+    }
+
+   
+    
+    
 }
 
 

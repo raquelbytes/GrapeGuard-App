@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import javax.persistence.*;
 import lombok.*;
 
-@Data
 @Entity
 @Table(name = "Nota")
 public class Nota implements Serializable {
@@ -44,4 +43,51 @@ public class Nota implements Serializable {
         this.fechaCreacion = LocalDateTime.now();
         this.prioridad = prioridad;
     }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Vinedo getVinedo() {
+        return vinedo;
+    }
+
+    public void setVinedo(Vinedo vinedo) {
+        this.vinedo = vinedo;
+    }
+
+    public String getNota() {
+        return nota;
+    }
+
+    public void setNota(String nota) {
+        this.nota = nota;
+    }
+
+    public LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public PrioridadNota getPrioridad() {
+        return prioridad;
+    }
+
+    public void setPrioridad(PrioridadNota prioridad) {
+        this.prioridad = prioridad;
+    }
+
+    @Override
+    public String toString() {
+        return "Nota{" + "id=" + id + ", vinedo=" + vinedo + ", nota=" + nota + ", fechaCreacion=" + fechaCreacion + ", prioridad=" + prioridad + '}';
+    }
+    
+    
 }

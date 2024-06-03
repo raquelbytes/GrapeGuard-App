@@ -4,17 +4,35 @@
  */
 package vista;
 
+import Util.TratamientoTableModel;
+import Util.VinedoTratamientoTableModel;
+import com.toedter.calendar.JDateChooser;
+import controlador.TratamientoController;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import modelo.vo.Tratamiento;
+import modelo.vo.Vinedo;
+import modelo.vo.VinedoTratamiento;
+import static vista.NotaView.controlador;
+
 /**
  *
  * @author raque
  */
 public class TratamientoView extends javax.swing.JFrame {
 
+    public static TratamientoController controlador = new TratamientoController();
+
     /**
      * Creates new form MainView
      */
     public TratamientoView() {
         initComponents();
+        controlador.iniciaSession();
     }
 
     /**
@@ -26,31 +44,33 @@ public class TratamientoView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        ComboUsuario = new javax.swing.JComboBox<>();
         PanelFormulario = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         txtPrecioTotal = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         txtCantidad = new javax.swing.JTextField();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        cmbPosesion = new javax.swing.JComboBox<>();
-        cmbTratamiento = new javax.swing.JComboBox<>();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        Tabla = new javax.swing.JTable();
         btnAdd = new javax.swing.JButton();
         btnBorrar = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
+        txtPrecioUni = new javax.swing.JTextField();
+        ComboVinedo = new javax.swing.JComboBox<>();
+        comboTratamiento = new javax.swing.JComboBox<>();
+        btnAddVinedoTrat = new javax.swing.JButton();
+        btnBorrarVinedoTrat = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        TratamientoTable = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        VinedoTratamientoTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        ComboUsuario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        ComboUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ComboUsuarioActionPerformed(evt);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
             }
         });
 
@@ -60,41 +80,81 @@ public class TratamientoView extends javax.swing.JFrame {
 
         jLabel3.setText("Precio Unitario");
 
-        jLabel4.setText("En posesion");
+        btnAdd.setText("Añadir");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
-        jLabel5.setText("Precio total del tratamiento");
+        btnBorrar.setText("Borrar");
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarActionPerformed(evt);
+            }
+        });
 
-        cmbPosesion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        btnModificar.setText("Modificar");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
 
-        cmbTratamiento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        ComboVinedo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComboVinedoActionPerformed(evt);
+            }
+        });
+
+        btnAddVinedoTrat.setText("Añadir");
+        btnAddVinedoTrat.setToolTipText("");
+        btnAddVinedoTrat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddVinedoTratActionPerformed(evt);
+            }
+        });
+
+        btnBorrarVinedoTrat.setText("Borrar");
+        btnBorrarVinedoTrat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarVinedoTratActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout PanelFormularioLayout = new javax.swing.GroupLayout(PanelFormulario);
         PanelFormulario.setLayout(PanelFormularioLayout);
         PanelFormularioLayout.setHorizontalGroup(
             PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelFormularioLayout.createSequentialGroup()
-                .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(16, 16, 16)
+                .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ComboVinedo, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(PanelFormularioLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(txtPrecioTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, PanelFormularioLayout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnAdd))
+                        .addGap(18, 18, 18)
+                        .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(PanelFormularioLayout.createSequentialGroup()
-                                .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
-                                .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtNombre)
-                                    .addComponent(txtCantidad)
-                                    .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
-                                    .addComponent(cmbPosesion, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cmbTratamiento, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(15, Short.MAX_VALUE))
+                                .addComponent(btnBorrar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnModificar))
+                            .addComponent(txtPrecioUni)
+                            .addComponent(txtCantidad)
+                            .addComponent(txtNombre)))
+                    .addGroup(PanelFormularioLayout.createSequentialGroup()
+                        .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(PanelFormularioLayout.createSequentialGroup()
+                                .addComponent(btnAddVinedoTrat)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnBorrarVinedoTrat))
+                            .addComponent(comboTratamiento, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtPrecioTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         PanelFormularioLayout.setVerticalGroup(
             PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -108,24 +168,29 @@ public class TratamientoView extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel2))
                     .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3)
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(21, 21, 21)
                 .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(cmbPosesion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(58, 58, 58)
-                .addComponent(jLabel5)
-                .addGap(4, 4, 4)
-                .addComponent(cmbTratamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtPrecioTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(52, Short.MAX_VALUE))
+                    .addComponent(jLabel3)
+                    .addComponent(txtPrecioUni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAdd)
+                    .addComponent(btnBorrar)
+                    .addComponent(btnModificar))
+                .addGap(51, 51, 51)
+                .addComponent(ComboVinedo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(comboTratamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtPrecioTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnAddVinedoTrat)
+                        .addComponent(btnBorrarVinedoTrat)))
+                .addGap(16, 16, 16))
         );
 
-        Tabla.setModel(new javax.swing.table.DefaultTableModel(
+        TratamientoTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -136,57 +201,153 @@ public class TratamientoView extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(Tabla);
+        TratamientoTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TratamientoTableMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(TratamientoTable);
 
-        btnAdd.setText("Añadir");
-
-        btnBorrar.setText("Borrar");
-
-        btnModificar.setText("Modificar");
+        VinedoTratamientoTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        VinedoTratamientoTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                VinedoTratamientoTableMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(VinedoTratamientoTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(55, 55, 55)
+                .addGap(37, 37, 37)
+                .addComponent(PanelFormulario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(PanelFormulario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(btnAdd)
-                        .addGap(26, 26, 26)
-                        .addComponent(btnBorrar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnModificar))
-                    .addComponent(ComboUsuario, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(107, 107, 107)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(40, 40, 40))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(39, 39, 39)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(ComboUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(PanelFormulario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnAdd)
-                            .addComponent(btnBorrar)
-                            .addComponent(btnModificar))))
-                .addContainerGap(72, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(64, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(PanelFormulario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void ComboUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboUsuarioActionPerformed
+    private void ComboVinedoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboVinedoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ComboUsuarioActionPerformed
+        
+    }//GEN-LAST:event_ComboVinedoActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        controlador.cargarComboTratamientos();
+        controlador.cargarComboVinedos();
+        controlador.getAllTratamientobyVinedo();
+    }//GEN-LAST:event_formWindowOpened
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+        controlador.cerrarSession();
+    }//GEN-LAST:event_formWindowClosed
+
+    private void TratamientoTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TratamientoTableMouseClicked
+        // TODO add your handling code here:
+        int filaSeleccionada = TratamientoTable.rowAtPoint(evt.getPoint());
+
+        if (filaSeleccionada >= 0) {
+            TratamientoTableModel modelo = (TratamientoTableModel) TratamientoTable.getModel();
+        }
+    }//GEN-LAST:event_TratamientoTableMouseClicked
+
+    private void VinedoTratamientoTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_VinedoTratamientoTableMouseClicked
+        // TODO add your handling code here:
+        int filaSeleccionada = VinedoTratamientoTable.rowAtPoint(evt.getPoint());
+
+        if (filaSeleccionada >= 0) {
+            VinedoTratamientoTableModel modelo = (VinedoTratamientoTableModel) VinedoTratamientoTable.getModel();
+        }
+    }//GEN-LAST:event_VinedoTratamientoTableMouseClicked
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // TODO add your handling code here:
+        controlador.insertarTratamiento();
+        controlador.cargarComboTratamientos();
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+        // TODO add your handling code here:
+
+        int filaSeleccionada = TratamientoTable.getSelectedRow();
+        if (filaSeleccionada >= 0) {
+            TratamientoTableModel modelo = (TratamientoTableModel) TratamientoTable.getModel();
+            Tratamiento tSeleccionado = modelo.getTratamientoAt(filaSeleccionada);
+            controlador.eliminarTratamiento(tSeleccionado, filaSeleccionada);
+            controlador.cargarComboTratamientos();
+            controlador.getAllTratamientobyVinedo();
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione una nota para borrar.", "Mensaje", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnBorrarActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        // TODO add your handling code here:
+        int filaSeleccionada = TratamientoTable.getSelectedRow();
+        if (filaSeleccionada >= 0) {
+            TratamientoTableModel modelo = (TratamientoTableModel) TratamientoTable.getModel();
+            Tratamiento tSeleccionado = modelo.getTratamientoAt(filaSeleccionada);
+            controlador.actualizarTratamiento(tSeleccionado, filaSeleccionada);
+            controlador.cargarComboTratamientos();
+            controlador.getAllTratamientobyVinedo();
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione una nota para modificar.", "Mensaje", JOptionPane.WARNING_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnAddVinedoTratActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddVinedoTratActionPerformed
+        // TODO add your handling code here:
+        controlador.insertarTratamientoVinedo();
+    }//GEN-LAST:event_btnAddVinedoTratActionPerformed
+
+    private void btnBorrarVinedoTratActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarVinedoTratActionPerformed
+        // TODO add your handling code here:
+        
+          int filaSeleccionada = VinedoTratamientoTable.getSelectedRow();
+        if (filaSeleccionada >= 0) {
+            VinedoTratamientoTableModel modelo = (VinedoTratamientoTableModel) VinedoTratamientoTable.getModel();
+            VinedoTratamiento tSeleccionado = modelo.getVinedoTratamientoAt(filaSeleccionada);
+            controlador.eliminarTratamientoVinedo(tSeleccionado, filaSeleccionada);
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione una nota para borrar.", "Mensaje", JOptionPane.WARNING_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_btnBorrarVinedoTratActionPerformed
 
     /**
      * @param args the command line arguments
@@ -226,24 +387,129 @@ public class TratamientoView extends javax.swing.JFrame {
         });
     }
 
+    public JComboBox<Vinedo> getComboVinedo() {
+        return ComboVinedo;
+    }
+
+    public void setComboVinedo(JComboBox<Vinedo> ComboVinedo) {
+        this.ComboVinedo = ComboVinedo;
+    }
+
+    public JButton getBtnAddVinedoTrat() {
+        return btnAddVinedoTrat;
+    }
+
+    public void setBtnAddVinedoTrat(JButton btnAddVinedoTrat) {
+        this.btnAddVinedoTrat = btnAddVinedoTrat;
+    }
+
+    public JButton getBtnBorrarVinedoTrat() {
+        return btnBorrarVinedoTrat;
+    }
+
+    public void setBtnBorrarVinedoTrat(JButton btnBorrarVinedoTrat) {
+        this.btnBorrarVinedoTrat = btnBorrarVinedoTrat;
+    }
+
+    public JComboBox<Tratamiento> getComboTratamiento() {
+        return comboTratamiento;
+    }
+
+    public void setComboTratamiento(JComboBox<Tratamiento> comboTratamiento) {
+        this.comboTratamiento = comboTratamiento;
+    }
+
+    public JTable getTratamientoTable() {
+        return TratamientoTable;
+    }
+
+    public void setTratamientoTable(JTable TratamientoTable) {
+        this.TratamientoTable = TratamientoTable;
+    }
+
+    public JTable getVinedoTratamientoTable() {
+        return VinedoTratamientoTable;
+    }
+
+    public void setVinedoTratamientoTable(JTable VinedoTratamientoTable) {
+        this.VinedoTratamientoTable = VinedoTratamientoTable;
+    }
+
+    public JButton getBtnAdd() {
+        return btnAdd;
+    }
+
+    public void setBtnAdd(JButton btnAdd) {
+        this.btnAdd = btnAdd;
+    }
+
+    public JButton getBtnBorrar() {
+        return btnBorrar;
+    }
+
+    public void setBtnBorrar(JButton btnBorrar) {
+        this.btnBorrar = btnBorrar;
+    }
+
+    public JButton getBtnModificar() {
+        return btnModificar;
+    }
+
+    public void setBtnModificar(JButton btnModificar) {
+        this.btnModificar = btnModificar;
+    }
+
+    public JTextField getTxtPrecioUni() {
+        return txtPrecioUni;
+    }
+
+    public void setTxtPrecioUni(JTextField txtPrecioUni) {
+        this.txtPrecioUni = txtPrecioUni;
+    }
+
+    public JTextField getTxtCantidad() {
+        return txtCantidad;
+    }
+
+    public void setTxtCantidad(JTextField txtCantidad) {
+        this.txtCantidad = txtCantidad;
+    }
+
+    public JTextField getTxtNombre() {
+        return txtNombre;
+    }
+
+    public void setTxtNombre(JTextField txtNombre) {
+        this.txtNombre = txtNombre;
+    }
+
+    public JLabel getTxtPrecioTotal() {
+        return txtPrecioTotal;
+    }
+
+    public void setTxtPrecioTotal(JLabel txtPrecioTotal) {
+        this.txtPrecioTotal = txtPrecioTotal;
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> ComboUsuario;
+    private javax.swing.JComboBox<Vinedo> ComboVinedo;
     private javax.swing.JPanel PanelFormulario;
-    private javax.swing.JTable Tabla;
+    private javax.swing.JTable TratamientoTable;
+    private javax.swing.JTable VinedoTratamientoTable;
     private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnAddVinedoTrat;
     private javax.swing.JButton btnBorrar;
+    private javax.swing.JButton btnBorrarVinedoTrat;
     private javax.swing.JButton btnModificar;
-    private javax.swing.JComboBox<String> cmbPosesion;
-    private javax.swing.JComboBox<String> cmbTratamiento;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private javax.swing.JComboBox<Tratamiento> comboTratamiento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JLabel txtPrecioTotal;
+    private javax.swing.JTextField txtPrecioUni;
     // End of variables declaration//GEN-END:variables
 }

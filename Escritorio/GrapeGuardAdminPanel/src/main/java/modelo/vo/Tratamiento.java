@@ -1,18 +1,10 @@
-
 package modelo.vo;
-
-/**
- *
- * @author raquel
- */
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
-import lombok.*;
 
-@Data
 @Entity
 @Table(name = "Tratamiento")
 public class Tratamiento implements Serializable {
@@ -30,25 +22,57 @@ public class Tratamiento implements Serializable {
 
     @Column(name = "precio_unitario", nullable = false)
     private double precioUnitario;
+    
+     @OneToMany(mappedBy = "tratamiento", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<VinedoTratamiento> tratamientos = new ArrayList<>();
 
-    @Column(name = "en_posesion", nullable = false)
-    private boolean enPosesion;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ID_usuario", nullable = false)
-    private Usuario usuario;
-
-    @OneToMany(mappedBy = "tratamiento", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
-    private List<VinedoTratamiento> vinedoTratamientos = new ArrayList<>();
 
     public Tratamiento() {
     }
 
-    public Tratamiento(String nombre, int cantidad, double precioUnitario, boolean enPosesion, Usuario usuario) {
+    public Tratamiento(String nombre, int cantidad, double precioUnitario) {
         this.nombre = nombre;
         this.cantidad = cantidad;
         this.precioUnitario = precioUnitario;
-        this.enPosesion = enPosesion;
-        this.usuario = usuario;
+      
     }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public double getPrecioUnitario() {
+        return precioUnitario;
+    }
+
+    public void setPrecioUnitario(double precioUnitario) {
+        this.precioUnitario = precioUnitario;
+    }
+
+    @Override
+    public String toString() {
+        return  nombre + " " + precioUnitario;
+    }
+
+  
 }

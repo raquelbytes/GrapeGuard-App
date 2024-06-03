@@ -4,17 +4,34 @@
  */
 package vista;
 
+import Util.NotaTableModel;
+import com.toedter.calendar.JDateChooser;
+import controlador.NotaController;
+import static controlador.NotaController.modeloTabla;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import modelo.vo.Nota;
+import modelo.vo.Nota.PrioridadNota;
+import modelo.vo.Vinedo;
+
 /**
  *
  * @author raque
  */
 public class NotaView extends javax.swing.JFrame {
-
+    public static NotaController controlador = new NotaController();
     /**
      * Creates new form MainView
      */
     public NotaView() {
         initComponents();
+         controlador.iniciaSession();
+         cargarPrioridades();
+         
     }
 
     /**
@@ -29,70 +46,77 @@ public class NotaView extends javax.swing.JFrame {
         ComboVinedo = new javax.swing.JComboBox<>();
         PanelFormulario = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtSuma = new javax.swing.JLabel();
-        FechaCreacion = new com.toedter.calendar.JDateChooser();
         cmbPrioridad = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         taNota = new javax.swing.JTextArea();
+        btnAdd = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla = new javax.swing.JTable();
-        btnAdd = new javax.swing.JButton();
         btnBorrar = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
-        ComboVinedo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        ComboVinedo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComboVinedoActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Nota");
-
-        jLabel3.setText("Fecha de Creación");
 
         jLabel4.setText("Prioridad");
 
         jLabel5.setText("Cantidad de notas de alta prioridad:");
 
-        cmbPrioridad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         taNota.setColumns(20);
         taNota.setRows(5);
         jScrollPane2.setViewportView(taNota);
+
+        btnAdd.setText("Añadir");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout PanelFormularioLayout = new javax.swing.GroupLayout(PanelFormulario);
         PanelFormulario.setLayout(PanelFormularioLayout);
         PanelFormularioLayout.setHorizontalGroup(
             PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelFormularioLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtSuma, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(PanelFormularioLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(PanelFormularioLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel3)
-                                .addGap(18, 18, 18)
-                                .addComponent(FechaCreacion, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, PanelFormularioLayout.createSequentialGroup()
-                                .addGap(44, 44, 44)
-                                .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, PanelFormularioLayout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(PanelFormularioLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(cmbPrioridad, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(PanelFormularioLayout.createSequentialGroup()
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(cmbPrioridad, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(51, 51, 51))
+            .addGroup(PanelFormularioLayout.createSequentialGroup()
+                .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelFormularioLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtSuma, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)))
+                    .addGroup(PanelFormularioLayout.createSequentialGroup()
+                        .addGap(114, 114, 114)
+                        .addComponent(btnAdd)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         PanelFormularioLayout.setVerticalGroup(
             PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -100,20 +124,18 @@ public class NotaView extends javax.swing.JFrame {
                 .addGap(22, 22, 22)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
-                .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3)
-                    .addComponent(FechaCreacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(PanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(cmbPrioridad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(46, 46, 46)
+                .addGap(28, 28, 28)
+                .addComponent(btnAdd)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addComponent(jLabel5)
-                .addGap(18, 18, 18)
-                .addComponent(txtSuma, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtSuma, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33))
         );
 
         Tabla.setModel(new javax.swing.table.DefaultTableModel(
@@ -127,13 +149,26 @@ public class NotaView extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        Tabla.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TablaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(Tabla);
 
-        btnAdd.setText("Añadir");
-
         btnBorrar.setText("Borrar");
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarActionPerformed(evt);
+            }
+        });
 
         btnModificar.setText("Modificar");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -144,8 +179,7 @@ public class NotaView extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(PanelFormulario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(btnAdd)
-                        .addGap(26, 26, 26)
+                        .addGap(123, 123, 123)
                         .addComponent(btnBorrar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnModificar))
@@ -166,7 +200,6 @@ public class NotaView extends javax.swing.JFrame {
                         .addComponent(PanelFormulario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnAdd)
                             .addComponent(btnBorrar)
                             .addComponent(btnModificar))))
                 .addContainerGap(50, Short.MAX_VALUE))
@@ -174,6 +207,70 @@ public class NotaView extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+      
+       controlador.cargarComboVinedos();
+       controlador.actualizarCount();
+      
+    }//GEN-LAST:event_formWindowOpened
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+        controlador.cerrarSession();
+    }//GEN-LAST:event_formWindowClosed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // TODO add your handling code here:
+        controlador.insertarNota();
+        controlador.actualizarCount();
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+        // TODO add your handling code here:
+          int filaSeleccionada = Tabla.getSelectedRow();
+    if (filaSeleccionada >= 0) {
+        NotaTableModel modelo = (NotaTableModel) Tabla.getModel();
+        Nota notaSeleccionada = modelo.getNotaAt(filaSeleccionada);
+        controlador.eliminarNota(notaSeleccionada,filaSeleccionada);
+        controlador.actualizarCount();
+    } else {
+        JOptionPane.showMessageDialog(this, "Seleccione una nota para borrar.", "Mensaje", JOptionPane.WARNING_MESSAGE);
+    }
+    }//GEN-LAST:event_btnBorrarActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        // TODO add your handling code here:
+                  int filaSeleccionada = Tabla.getSelectedRow();
+    if (filaSeleccionada >= 0) {
+          NotaTableModel modelo = (NotaTableModel) Tabla.getModel();
+        Nota notaSeleccionada = modelo.getNotaAt(filaSeleccionada);
+         controlador.actualizarNota(notaSeleccionada,filaSeleccionada);
+         controlador.actualizarCount();
+        
+    } else {
+        JOptionPane.showMessageDialog(this, "Seleccione una nota para modificar.", "Mensaje", JOptionPane.WARNING_MESSAGE);
+    }
+       
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void TablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaMouseClicked
+        // TODO add your handling code here:
+      int filaSeleccionada = Tabla.rowAtPoint(evt.getPoint());
+    
+    if (filaSeleccionada >= 0) {
+        NotaTableModel modelo = (NotaTableModel) Tabla.getModel();
+        Nota notaSeleccionada = modelo.getNotaAt(filaSeleccionada);
+        System.out.println("Nota seleccionada: " + notaSeleccionada);
+    }
+    
+    }//GEN-LAST:event_TablaMouseClicked
+
+    private void ComboVinedoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboVinedoActionPerformed
+        // TODO add your handling code here:
+          controlador.actualizarCount();
+    }//GEN-LAST:event_ComboVinedoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -214,16 +311,14 @@ public class NotaView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> ComboVinedo;
-    private com.toedter.calendar.JDateChooser FechaCreacion;
+    private javax.swing.JComboBox<Vinedo> ComboVinedo;
     private javax.swing.JPanel PanelFormulario;
     private javax.swing.JTable Tabla;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnModificar;
-    private javax.swing.JComboBox<String> cmbPrioridad;
+    private javax.swing.JComboBox<PrioridadNota> cmbPrioridad;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
@@ -231,4 +326,75 @@ public class NotaView extends javax.swing.JFrame {
     private javax.swing.JTextArea taNota;
     private javax.swing.JLabel txtSuma;
     // End of variables declaration//GEN-END:variables
+
+    public JComboBox<Vinedo> getComboVinedo() {
+        return ComboVinedo;
+    }
+
+    public void setComboVinedo(JComboBox<Vinedo> ComboVinedo) {
+        this.ComboVinedo = ComboVinedo;
+    }
+
+
+    public JTable getTabla() {
+        return Tabla;
+    }
+
+    public void setTabla(JTable Tabla) {
+        this.Tabla = Tabla;
+    }
+
+    public JButton getBtnAdd() {
+        return btnAdd;
+    }
+
+    public void setBtnAdd(JButton btnAdd) {
+        this.btnAdd = btnAdd;
+    }
+
+    public JButton getBtnBorrar() {
+        return btnBorrar;
+    }
+
+    public void setBtnBorrar(JButton btnBorrar) {
+        this.btnBorrar = btnBorrar;
+    }
+
+    public JButton getBtnModificar() {
+        return btnModificar;
+    }
+
+    public void setBtnModificar(JButton btnModificar) {
+        this.btnModificar = btnModificar;
+    }
+
+    public JComboBox<PrioridadNota> getCmbPrioridad() {
+        return cmbPrioridad;
+    }
+
+    public void setCmbPrioridad(JComboBox<PrioridadNota> cmbPrioridad) {
+        this.cmbPrioridad = cmbPrioridad;
+    }
+
+    public JTextArea getTaNota() {
+        return taNota;
+    }
+
+    public void setTaNota(JTextArea taNota) {
+        this.taNota = taNota;
+    }
+
+    public JLabel getTxtSuma() {
+        return txtSuma;
+    }
+
+    public void setTxtSuma(JLabel txtSuma) {
+        this.txtSuma = txtSuma;
+    }
+ private void cargarPrioridades() {
+        cmbPrioridad.removeAllItems();
+        for (Nota.PrioridadNota prioridad : Nota.PrioridadNota.values()) {
+            cmbPrioridad.addItem(prioridad);
+        }
+    }
 }
