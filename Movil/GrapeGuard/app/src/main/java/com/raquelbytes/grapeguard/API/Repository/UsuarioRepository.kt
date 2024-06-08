@@ -27,6 +27,7 @@ class UsuarioRepository {
 
         fun loginUsuario(context: Context, email: String, contrasena: String, callBack: UserLoginCallback) {
             val url = "${ApiMap.BASE_URL}${ApiMap.USUARIO_BASE}${ApiMap.USUARIO_LOGIN}"
+            Log.e("utl",url)
             val stringRequest = object : StringRequest(Request.Method.POST, url,
                 Response.Listener { response ->
                     Log.d("Login Response", response)
@@ -70,12 +71,15 @@ class UsuarioRepository {
 
         fun registrarUsuario(context: Context, usuario: Usuario, callback: UserRegisterCallback) {
             val url = "${ApiMap.BASE_URL}${ApiMap.USUARIO_BASE}${ApiMap.USUARIO_REGISTER}"
+            Log.e("utl", url)
             val stringRequest = object : StringRequest(Request.Method.POST, url,
                 Response.Listener { response -> callback.onUserRegisterSuccess(response) },
                 Response.ErrorListener { error ->
                     var errorMessage = "Error desconocido"
                     if (error.networkResponse != null && error.networkResponse.data != null) {
                         errorMessage = String(error.networkResponse.data, StandardCharsets.UTF_8)
+
+                        Log.e("utl", error.toString())
                     }
                     callback.onUserRegisterFailed(errorMessage)
                 }) {

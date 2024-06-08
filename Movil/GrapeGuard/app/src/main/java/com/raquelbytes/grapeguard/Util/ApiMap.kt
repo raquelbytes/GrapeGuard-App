@@ -2,7 +2,7 @@ package com.raquelbytes.grapeguard.Util
 
 
 object ApiMap {
-    const val BASE_URL = "http://192.168.1.141:8080"
+    const val BASE_URL = "http://192.168.1.140:8080"
 
     // Usuarios
     const val USUARIO_BASE = "/usuarios"

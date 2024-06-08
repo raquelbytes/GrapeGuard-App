@@ -8,13 +8,16 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.raquelbytes.grapeguard.API.Interface.VinedoCallback
@@ -102,7 +105,7 @@ class MainActivity : AppCompatActivity(), AddVinedoDialogFragment.AddVinedoDialo
     private fun getFotoUsuario(id: Int): String? {
         val usuarioDAO = UsuarioDAO(this)
         val usuario = usuarioDAO.obtenerUsuario(id)
-        Log.e("usuario", usuario.toString()) // Agregamos un log para ver el valor de usuario
+        Log.e("usuario", usuario.toString())
 
         return usuario?.foto
     }
@@ -141,7 +144,8 @@ class MainActivity : AppCompatActivity(), AddVinedoDialogFragment.AddVinedoDialo
 
                         cardView.tag = vinedo.id // Agregar una etiqueta con el ID del viñedo
 
-                        cardView.setOnClickListener {
+                        val clickableLayout: LinearLayout = cardView.findViewById(R.id.linearlayout)
+                        clickableLayout.setOnClickListener {
                             val intent = Intent(this@MainActivity, VinedoActivity::class.java)
                             intent.putExtra("vinedo", vinedo)
                             Log.e("Vinedo", vinedo.usuario.toString())
@@ -169,6 +173,13 @@ class MainActivity : AppCompatActivity(), AddVinedoDialogFragment.AddVinedoDialo
             }
 
             override fun onVinedoError(errorMessage: String) {
+                if (errorMessage.contains("Ya existe un viñedo en esta ubicación")) {
+                    // Muestra un Toast indicando que ya existe un viñedo en la ubicación especificada
+                    Toast.makeText(this@MainActivity, getString(R.string.toast_invalid_vinedo), Toast.LENGTH_SHORT).show()
+                } else {
+                    // Muestra un Toast genérico para otros errores desconocidos
+                    Toast.makeText(this@MainActivity, "Error desconocido", Toast.LENGTH_SHORT).show()
+                }
                 Log.e("Error al agregar viñedo", errorMessage)
             }
         })
@@ -185,5 +196,16 @@ class MainActivity : AppCompatActivity(), AddVinedoDialogFragment.AddVinedoDialo
             notificationManager.createNotificationChannel(channel)
         }
     }
+    override fun onResume() {
+        super.onResume()
+        // Actualizar los datos al volver a la actividad
+        idUsuario = getUsuarioId()
+        val profileImageButton: ImageView = findViewById(R.id.profileImageView)
+        val fotoUsuario = getFotoUsuario(idUsuario!!)
+        cargarFotoUsuarioEnBoton(profileImageButton, fotoUsuario)
+        val vineyardContainer: LinearLayout = findViewById(R.id.vineyardContainer)
+        loadVineyards(idUsuario!!, vineyardContainer)
+    }
+
 
 }

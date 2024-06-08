@@ -83,5 +83,13 @@ public class TratamientoDAO {
         }
 
     }
+    
+    public Tratamiento existeTratamientoConMismoNombreYPrecio(Session session, String nombre, Double precioUnitario) throws Exception {
+    Query<Tratamiento> q = session.createQuery("FROM Tratamiento t WHERE t.nombre = :nombre AND t.precioUnitario = :precioUnitario", Tratamiento.class);
+    q.setParameter("nombre", nombre);
+    q.setParameter("precioUnitario", precioUnitario);
+    return q.uniqueResult();
+}
+
 
 }

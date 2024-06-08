@@ -76,4 +76,9 @@ public class TratamientoTableModel extends AbstractTableModel {
         tratamientos.clear();
         fireTableDataChanged();
     }
+    
+     public void actualizarDatos(List<Tratamiento> nuevosTratamientos) {
+        setTratamientos(nuevosTratamientos);
+        fireTableDataChanged();
+    }
 }

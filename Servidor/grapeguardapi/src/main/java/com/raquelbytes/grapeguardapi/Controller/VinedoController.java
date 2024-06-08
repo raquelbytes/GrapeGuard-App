@@ -58,7 +58,7 @@ public class VinedoController {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado con ID: " + usuarioId));
 
-        if (vinedoRepository.existsByUbicacion(nuevoVinedoDTO.getUbicacion())) {
+        if (vinedoRepository. existsByNombreAndUbicacion(nuevoVinedoDTO.getNombre(), nuevoVinedoDTO.getUbicacion())) {
             Map<String, String> response = new HashMap<>();
             response.put("error", "Ya existe un viñedo en esta ubicación");
             return ResponseEntity.badRequest().body(response);

@@ -30,13 +30,31 @@ class UsuarioDAO(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nu
     }
 
     fun insertarUsuario(db: SQLiteDatabase, id: Int, nombre: String, apellido: String, foto: String) {
+        val usuarioExistente = obtenerUsuario(id)
+        if (usuarioExistente != null) {
+            // Si el usuario ya existe, actualiza sus datos
+            actualizarUsuarioDatos(id, nombre, apellido, foto)
+        } else {
+            // Si el usuario no existe, lo inserta como un nuevo usuario
+            val contentValues = ContentValues()
+            contentValues.put(COLUMN_ID, id)
+            contentValues.put(COLUMN_NOMBRE, nombre)
+            contentValues.put(COLUMN_APELLIDO, apellido)
+            contentValues.put(COLUMN_FOTO, foto)
+            db.insert(TABLE_NAME, null, contentValues)
+        }
+    }
+
+    private fun actualizarUsuarioDatos(id: Int, nombre: String, apellido: String, foto: String) {
+        val db = this.writableDatabase
         val contentValues = ContentValues()
-        contentValues.put(COLUMN_ID, id)
         contentValues.put(COLUMN_NOMBRE, nombre)
         contentValues.put(COLUMN_APELLIDO, apellido)
         contentValues.put(COLUMN_FOTO, foto)
-        db.insert(TABLE_NAME, null, contentValues)
+        db.update(TABLE_NAME, contentValues, "$COLUMN_ID = ?", arrayOf(id.toString()))
+        db.close()
     }
+
 
 
     @SuppressLint("Range")
@@ -65,5 +83,15 @@ class UsuarioDAO(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nu
         db.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
         db.close()
     }
+    fun actualizarUsuario(usuario: Usuario) {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(COLUMN_NOMBRE, usuario.nombre)
+        contentValues.put(COLUMN_APELLIDO, usuario.apellido)
+        contentValues.put(COLUMN_FOTO, usuario.foto)
+        db.update(TABLE_NAME, contentValues, "$COLUMN_ID = ?", arrayOf(usuario.id.toString()))
+        db.close()
+    }
+
 
 }

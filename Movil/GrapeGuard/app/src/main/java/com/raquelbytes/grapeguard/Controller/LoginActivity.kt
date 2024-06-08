@@ -116,9 +116,9 @@ class LoginActivity : AppCompatActivity(), UserLoginCallback {
     override fun onLoginError(message: String) {
         // Muestra un mensaje de error según el tipo de error
         if (message.contains("Usuario o contraseña incorrectos")) {
-            Toast.makeText(this, getString(R.string.toast_bienvenido_grapeguard), Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.toast_usuario_contraseña_incorrectos), Toast.LENGTH_LONG).show()
         } else {
-            Toast.makeText(this, getString(R.string.toast_bienvenido_grapeguard), Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.toast_error_inesperado), Toast.LENGTH_LONG).show()
         }
     }
 }

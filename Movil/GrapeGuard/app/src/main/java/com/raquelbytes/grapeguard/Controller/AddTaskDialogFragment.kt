@@ -84,19 +84,42 @@ class AddTaskDialogFragment : DialogFragment() {
 
         // Listener para el botón de agregar
         addButton.setOnClickListener {
+            val tareaTexto = tareaEditText.text.toString().trim()
+
+            // Verifica si el campo de la tarea está vacío
+            if (tareaTexto.isEmpty()) {
+                Toast.makeText(requireContext(), "Debe completar al menos el nombre de la tarea", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener // Sal de la función si el campo está vacío
+            }
+
             // Crea un objeto de tipo Tarea con los datos ingresados por el usuario
             val tarea = Tarea().apply {
-                this.tarea = tareaEditText.text.toString()
-                this.estado = EstadoTarea.valueOf(estadoSpinner.selectedItem.toString())
+                this.tarea = tareaTexto
+
+                // Obtén el estado seleccionado del Spinner y asigna el valor correspondiente del enum
+                val estadoSeleccionado = estadoSpinner.selectedItem.toString().trim()
+                this.estado = when (estadoSeleccionado) {
+                    "Pendiente" -> EstadoTarea.Pendiente
+                    "Pendente" -> EstadoTarea.Pendiente
+                    "En Progreso" -> EstadoTarea.EnProgreso
+                    "Completada" -> EstadoTarea.Completada
+                    else -> throw IllegalArgumentException("Estado de tarea desconocido: $estadoSeleccionado")
+                }
+
                 this.recordatorio = selectedRecordatorio
                 this.fechaRealizacion = selectedFechaRealizacion
             }
-            listener.onTaskAdded(tarea) // Llama al método onTaskAdded del listener para pasar la nueva tarea a la actividad
 
+            // Llama al método onTaskAdded del listener para pasar la nueva tarea a la actividad
+            listener.onTaskAdded(tarea)
+
+            // Si hay un recordatorio seleccionado, programa la notificación
             if (selectedRecordatorio != null) {
                 scheduleNotification(selectedRecordatorio!!, tarea.tarea!!)
             }
-            dismiss() // Cierra el diálogo
+
+            // Cierra el diálogo
+            dismiss()
         }
 
         return view

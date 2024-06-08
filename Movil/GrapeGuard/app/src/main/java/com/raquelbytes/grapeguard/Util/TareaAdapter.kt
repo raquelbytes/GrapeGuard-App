@@ -27,7 +27,13 @@ class TareaAdapter(
         val imageViewRecordatorio = view.findViewById<ImageView>(R.id.imageViewRecordatorioTarea)
 
         textViewDescripcion.text = tarea.tarea
-        textViewEstado.text = tarea.estado.toString()
+        if( tarea.estado.toString().contains("EnProgreso")){
+            textViewEstado.text = "En Progreso"
+        }
+        else{
+            textViewEstado.text = tarea.estado.toString()
+        }
+
         textViewFechaRealizacion.text = tarea.fechaRealizacion
 
         // Verificar si el ImageView es nulo

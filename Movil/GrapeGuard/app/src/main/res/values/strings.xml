@@ -3,7 +3,7 @@
     <string name="title_activity_login" translatable="false">Login</string>
         <string-array name="estado_tarea_array">
             <item>Pendiente</item>
-            <item>EnProgreso</item>
+            <item>En Progreso</item>
             <item>Completada</item>
         </string-array>
     <string name="hint_variedad">Variedad</string>
@@ -37,7 +37,7 @@
     <string name="button_register">Registrarse</string>
     <string name="welcome_message">Bienvenido a GrapeGuard</string>
     <string name="login_using">Iniciar sesión con:</string>
-    <string name="tagline">Cultiva la excelencia</string>
+    <string name="tagline">Gestiona tus viñedos, cosecha la excelencia</string>
 
     <string name="login_title">Inicia Sesión</string>
     <string name="email_label">Email:</string>
@@ -61,7 +61,8 @@
     <string name="logout">Cerrar Sesión</string>
 
     <string name="logo_description">Logo</string>
-
+    <string name="vineyard">Viñedo</string>
+    <string name="vineyards">Viñedos</string>
     <string name="vineyard_name">Nombre del Viñedo</string>
     <string name="vineyard_location">Ubicación del Viñedo</string>
     <string name="variety">Variedad</string>
@@ -86,6 +87,7 @@
     <string name="toast_bienvenido_grapeguard">¡Bienvenido a GrapeGuard!</string>
     <string name="toast_usuario_contraseña_incorrectos">Usuario o contraseña incorrectos</string>
     <string name="toast_error_inesperado">Error Inesperado</string>
+    <string name="toast_invalid_vinedo">Ya existe ese viñedo en esa ubicación</string>
 
     <!-- Toast messages -->
     <string name="toast_foto_no_capturada">Foto no capturada</string>

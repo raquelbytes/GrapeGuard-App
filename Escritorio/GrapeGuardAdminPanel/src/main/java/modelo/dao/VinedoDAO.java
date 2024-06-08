@@ -19,22 +19,14 @@ import org.hibernate.query.Query;
 
 public class VinedoDAO {
 
-public Long sumarHectareasPorUsuario(Session session, int idUsuario) throws Exception {
-    Long sumaHectareas = null;
-    Query q = session.createQuery("SELECT SUM(v.hectareas) FROM Vinedo v WHERE v.usuario.id = :idUsuario");
-    q.setParameter("idUsuario", idUsuario);
-    
-   
-    Number resultado = (Number) q.uniqueResult();
-    if (resultado != null) {
-        sumaHectareas = resultado.longValue();
-  
-    }
-    else{
-     sumaHectareas = Long.parseLong("0");}
-  
-    return sumaHectareas;
+public Double sumarHectareasPorUsuario(Session session, int usuarioId) {
+    Double sum = (Double) session.createQuery(
+        "SELECT SUM(v.hectareas) FROM Vinedo v WHERE v.usuario.id = :usuarioId")
+        .setParameter("usuarioId", usuarioId)
+        .uniqueResult();
+    return sum != null ? sum : 0.0;
 }
+
 
 
 
@@ -98,6 +90,13 @@ public Long sumarHectareasPorUsuario(Session session, int idUsuario) throws Exce
                   .setParameter("idUsuario", idUsuario)
                   .list();
 }
+    public Vinedo buscarVinedoPorNombreYUbicacion(Session session, String nombre, String ubicacion) throws Exception {
+    Query<Vinedo> q = session.createQuery("from Vinedo v where v.nombre = :nombre and v.ubicacion = :ubicacion", Vinedo.class);
+    q.setParameter("nombre", nombre);
+    q.setParameter("ubicacion", ubicacion);
+    return q.uniqueResult();
+}
+
 
 }
 

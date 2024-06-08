@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 
 public class NotaTableModel extends AbstractTableModel {
     private final List<Nota> notas;
-    private final String[] columnNames = {"Viñedo", "ID", "Nota", "Fecha Creacion", "Prioridad"};
+    private final String[] columnNames = {"Viñedo", "ID", "Nota", "Fecha Creación", "Prioridad"};
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     public NotaTableModel(List<Nota> notas) {
@@ -66,18 +66,25 @@ public class NotaTableModel extends AbstractTableModel {
     public void setNotas(List<Nota> notas) {
         this.notas.clear();
         this.notas.addAll(notas);
-       
+        fireTableDataChanged(); // Necesario para refrescar la tabla
     }
+    
     public Nota getNotaAt(int rowIndex) {
-    if (rowIndex >= 0 && rowIndex < notas.size()) {
-        return notas.get(rowIndex);
-    } else {
-        return null; 
-    }
-}
-       public void limpiar() {
-        notas.clear();
-        
+        if (rowIndex >= 0 && rowIndex < notas.size()) {
+            return notas.get(rowIndex);
+        } else {
+            return null; 
+        }
     }
 
+    public void limpiar() {
+        notas.clear();
+        fireTableDataChanged();
+    }
+    
+      public void actualizarDatos(List<Nota> nuevasNotas) {
+        this.notas.clear();
+        this.notas.addAll(nuevasNotas); 
+        fireTableDataChanged();
+    }
 }

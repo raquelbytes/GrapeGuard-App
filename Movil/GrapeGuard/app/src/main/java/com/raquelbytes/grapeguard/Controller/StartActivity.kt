@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.raquelbytes.grapeguard.R
+import com.raquelbytes.grapeguard.Util.LocaleUtil
 
 // Clase para la actividad de inicio
 class StartActivity : AppCompatActivity() {
@@ -16,6 +17,7 @@ class StartActivity : AppCompatActivity() {
 
         override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
+                LocaleUtil.loadLocale(this);
                 setContentView(R.layout.loggin_view) // Establece el diseño de la actividad de inicio
 
                 // Inicializa las preferencias compartidas

@@ -55,37 +55,51 @@ public class VinedoController {
             HibernateUtil.beginTx(session);
             usDAO.cargarCombo(session, modeloCombo);
             HibernateUtil.commitTx(session);
+            limpiarFormulario();
         } catch (Exception ex) {
             session.getTransaction().rollback();
             Logger.getLogger(VinedoController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public static void insertarVinedo() {
-        Usuario usuarioSeleccionado = (Usuario) ventana.getComboUsuario().getSelectedItem();
-        String nombre = ventana.getTxtNombre().getText();
-        String ubicacion = ventana.getTxtUbicacion().getText();
-        Date fechaPlantacion = ventana.getjDateChooser1().getDate();
-        String hectareas = ventana.getTxtHectareas().getText();
+  public static void insertarVinedo() {
+    Usuario usuarioSeleccionado = (Usuario) ventana.getComboUsuario().getSelectedItem();
+    String nombre = ventana.getTxtNombre().getText();
+    String ubicacion = ventana.getTxtUbicacion().getText();
+    Date fechaPlantacion = ventana.getjDateChooser1().getDate();
+    String hectareas = ventana.getTxtHectareas().getText();
 
-        if (usuarioSeleccionado != null && !nombre.isEmpty() && !ubicacion.isEmpty() && fechaPlantacion != null && !hectareas.isEmpty()) {
-            try {
-                Double hect = Double.valueOf(hectareas);
-                HibernateUtil.beginTx(session);
-                Vinedo nuevoVinedo = new Vinedo(usuarioSeleccionado, nombre, ubicacion, fechaPlantacion, hect);
-                vinDAO.insertar(session, nuevoVinedo);
-                modeloTabla.addVinedo(nuevoVinedo);
-                HibernateUtil.commitTx(session);
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "El formato de hectáreas es incorrecto. Asegúrese de ingresar un número válido.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) {
-                session.getTransaction().rollback();
-                Logger.getLogger(VinedoController.class.getName()).log(Level.SEVERE, null, ex);
+    if (usuarioSeleccionado != null && !nombre.isEmpty() && !ubicacion.isEmpty() && fechaPlantacion != null && !hectareas.isEmpty()) {
+        try {
+            Double hect = Double.valueOf(hectareas);
+
+            // Verificar si ya existe un viñedo con el mismo nombre y ubicación
+            HibernateUtil.beginTx(session);
+            Vinedo existe = vinDAO.buscarVinedoPorNombreYUbicacion(session, nombre, ubicacion);
+            if (existe != null) {
+                JOptionPane.showMessageDialog(null, "Ya existe un viñedo con ese nombre y ubicación.", "Error", JOptionPane.ERROR_MESSAGE);
+                HibernateUtil.rollbackTx(session);
+                return;
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Debe introducir todos los campos", "Mensaje", JOptionPane.WARNING_MESSAGE);
+
+            Vinedo nuevoVinedo = new Vinedo(usuarioSeleccionado, nombre, ubicacion, fechaPlantacion, hect);
+            vinDAO.insertar(session, nuevoVinedo);
+            modeloTabla.addVinedo(nuevoVinedo);
+            HibernateUtil.commitTx(session);
+            limpiarFormulario();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El formato de hectáreas es incorrecto. Asegúrese de ingresar un número válido.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+            HibernateUtil.rollbackTx(session);
+        } catch (Exception ex) {
+            session.getTransaction().rollback();
+            Logger.getLogger(VinedoController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    } else {
+        JOptionPane.showMessageDialog(null, "Debe introducir todos los campos", "Mensaje", JOptionPane.WARNING_MESSAGE);
     }
+}
+
+
 
     public static void actualizarVinedo(Vinedo vinedo, int filaSeleccionada) {
         try {
@@ -97,10 +111,18 @@ public class VinedoController {
             if (!nombre.isEmpty() && !ubicacion.isEmpty() && fechaPlantacion != null && !hectareas.isEmpty()) {
                 try {
                     Double hect = Double.valueOf(hectareas);
+                    Vinedo existe = vinDAO.buscarVinedoPorNombreYUbicacion(session, nombre, ubicacion);
+                    if (existe != null) {
+                        JOptionPane.showMessageDialog(null, "Ya existe un viñedo con ese nombre y ubicación.", "Error", JOptionPane.ERROR_MESSAGE);
+                        HibernateUtil.rollbackTx(session);
+                        return;
+                    }
+
                     HibernateUtil.beginTx(session);
                     Vinedo v = vinDAO.modificar(session, vinedo, nombre, ubicacion, fechaPlantacion, hectareas);
                     modeloTabla.updateVinedo(filaSeleccionada, v);
                     HibernateUtil.commitTx(session);
+                      limpiarFormulario();
                 } catch (NumberFormatException e) {
                     JOptionPane.showMessageDialog(null, "El formato de hectáreas es incorrecto. Asegúrese de ingresar un número válido.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
                 } catch (Exception ex) {
@@ -131,6 +153,7 @@ public class VinedoController {
                     modeloTabla.removeVinedo(filaSeleccionada);
                 }
                 HibernateUtil.commitTx(session);
+                  limpiarFormulario();
             } catch (Exception ex) {
                 session.getTransaction().rollback();
                 Logger.getLogger(VinedoController.class.getName()).log(Level.SEVERE, null, ex);
@@ -140,23 +163,22 @@ public class VinedoController {
             return;
         }
     }
-    public static void actualizarSuma() {
-        try {
-            HibernateUtil.beginTx(session);
-            Usuario usuarioSeleccionado = (Usuario) ventana.getComboUsuario().getSelectedItem();
+   public static void actualizarSuma() {
+    try {
+        HibernateUtil.beginTx(session);
+        Usuario usuarioSeleccionado = (Usuario) ventana.getComboUsuario().getSelectedItem();
 
-            if (usuarioSeleccionado != null) {
-
-                Long sumhectareas = vinDAO.sumarHectareasPorUsuario(session, usuarioSeleccionado.getId());
-                ventana.getTxtSuma().setText("El usuario tiene un total de " + sumhectareas + " hectareas.");
-            }
-            HibernateUtil.commitTx(session);
-        } catch (Exception ex) {
-            session.getTransaction().rollback();
-            Logger.getLogger(NotaController.class.getName()).log(Level.SEVERE, null, ex);
+        if (usuarioSeleccionado != null) {
+            Double sumHectareas = vinDAO.sumarHectareasPorUsuario(session, usuarioSeleccionado.getId());
+            ventana.getTxtSuma().setText("El usuario tiene un total de " + sumHectareas + " hectáreas.");
         }
-
+        HibernateUtil.commitTx(session);
+    } catch (Exception ex) {
+        session.getTransaction().rollback();
+        Logger.getLogger(VinedoController.class.getName()).log(Level.SEVERE, null, ex);
     }
+}
+
 
     public static void getAllVinedosByUsuario() {
         List<Vinedo> vinedosusuario = null;
@@ -178,5 +200,36 @@ public class VinedoController {
         }
 
     }
+    public static void limpiarFormulario() {
+    ventana.getTxtNombre().setText("");
+    ventana.getTxtUbicacion().setText("");
+    ventana.getjDateChooser1().setDate(null);
+    ventana.getTxtHectareas().setText("");
+    ventana.getComboUsuario().setSelectedItem(null);
+    
+}
+    
+     public static void limpiarSOLOFormulario() {
+    ventana.getTxtNombre().setText("");
+    ventana.getTxtUbicacion().setText("");
+    ventana.getjDateChooser1().setDate(null);
+    ventana.getTxtHectareas().setText("");
+    
+}
+public static void cargarVinedoEnFormulario(Vinedo vinedo) {
+    ventana.getComboUsuario().setSelectedItem(vinedo.getUsuario());
+    ventana.getTxtNombre().setText(vinedo.getNombre());
+    ventana.getTxtUbicacion().setText(vinedo.getUbicacion());
+    ventana.getjDateChooser1().setDate(vinedo.getFechaPlantacion());
+    ventana.getTxtHectareas().setText(vinedo.getHectareas().toString());
+}
+// Método para actualizar los datos de los viñedos
+public static void actualizarDatosVinedos() {
+    cargarComboUsuarios();
+  limpiarFormulario();
+    modeloTabla.setVinedos(vinDAO.getAllVinedos(session)); 
+  
+}
+
 
 }

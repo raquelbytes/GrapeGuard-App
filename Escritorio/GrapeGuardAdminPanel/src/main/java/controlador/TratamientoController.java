@@ -1,4 +1,3 @@
-
 package controlador;
 
 import Util.TratamientoTableModel;
@@ -23,10 +22,6 @@ import org.hibernate.Session;
 import vista.MainView;
 import vista.TratamientoView;
 
-/**
- *
- * @author raque
- */
 public class TratamientoController {
     public static Session session;
     public static TratamientoDAO tatDAO;
@@ -34,11 +29,10 @@ public class TratamientoController {
     public static VinedoTratamientoDAO vintatDAO;
     public static TratamientoView ventana = new TratamientoView();
     public static DefaultComboBoxModel modeloComboVinedo = new DefaultComboBoxModel();
-     public static DefaultComboBoxModel modeloComboTratamiento = new DefaultComboBoxModel();
+    public static DefaultComboBoxModel modeloComboTratamiento = new DefaultComboBoxModel();
     public static TratamientoTableModel modeloTablaTratamiento;
     public static VinedoTratamientoTableModel modeloTablaVinedoTratamiento;
-    
-    
+
     public static void iniciar() {
         ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         ventana.setVisible(true);
@@ -46,11 +40,9 @@ public class TratamientoController {
         ventana.getComboVinedo().setModel(modeloComboVinedo);
         ventana.getComboTratamiento().setModel(modeloComboTratamiento);
         modeloTablaTratamiento = new TratamientoTableModel(tatDAO.getAllTratamientos(session));
-        modeloTablaVinedoTratamiento = new VinedoTratamientoTableModel(new ArrayList <>());
+        modeloTablaVinedoTratamiento = new VinedoTratamientoTableModel(new ArrayList<>());
         ventana.getTratamientoTable().setModel(modeloTablaTratamiento);
         ventana.getVinedoTratamientoTable().setModel(modeloTablaVinedoTratamiento);
-        
-   
     }
 
     public static void iniciaSession() {
@@ -58,14 +50,13 @@ public class TratamientoController {
         vintatDAO = HibernateUtil.getVinedoTratamientoDAO();
         tatDAO = HibernateUtil.getTratamientoDAO();
         vinDAO = HibernateUtil.getVinedoDAO();
-      
     }
 
     public static void cerrarSession() {
-        session.close();       
+        session.close();
     }
-    
-     public static void cargarComboVinedos() {
+
+    public static void cargarComboVinedos() {
         try {
             HibernateUtil.beginTx(session);
             vinDAO.cargarCombo(session, modeloComboVinedo);
@@ -75,8 +66,8 @@ public class TratamientoController {
             Logger.getLogger(TratamientoController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-     
-       public static void cargarComboTratamientos() {
+
+    public static void cargarComboTratamientos() {
         try {
             HibernateUtil.beginTx(session);
             tatDAO.cargarCombo(session, modeloComboTratamiento);
@@ -86,51 +77,34 @@ public class TratamientoController {
             Logger.getLogger(TratamientoController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-     public static void insertarTratamiento() {
-    String nombre = ventana.getTxtNombre().getText();
-    String cantidad = ventana.getTxtCantidad().getText();
-    String precioUnitario = ventana.getTxtPrecioUni().getText();
-    
-    if (!nombre.isEmpty() && !cantidad.isEmpty() && !precioUnitario.isEmpty()) {
-        try {
-            Double precio = Double.valueOf(precioUnitario);
-            int cant = Integer.valueOf(cantidad);
-            
-            HibernateUtil.beginTx(session);
-            Tratamiento nuevoTratamiento = new Tratamiento(nombre, cant, precio);
-            tatDAO.insertar(session, nuevoTratamiento);
-            modeloTablaTratamiento.addTratamiento(nuevoTratamiento);
-            HibernateUtil.commitTx(session);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El formato de cantidad o precio unitario es incorrecto. Asegúrese de ingresar números válidos.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception ex) {
-            session.getTransaction().rollback();
-            Logger.getLogger(VinedoController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    } else {
-        JOptionPane.showMessageDialog(null, "Debe introducir todos los campos", "Mensaje", JOptionPane.WARNING_MESSAGE);
-    }
-}
 
-     
-public static void actualizarTratamiento(Tratamiento tratamiento, int filaSeleccionada) {
-    try {
+    public static void insertarTratamiento() {
         String nombre = ventana.getTxtNombre().getText();
         String cantidad = ventana.getTxtCantidad().getText();
         String precioUnitario = ventana.getTxtPrecioUni().getText();
-        
+
         if (!nombre.isEmpty() && !cantidad.isEmpty() && !precioUnitario.isEmpty()) {
             try {
                 Double precio = Double.valueOf(precioUnitario);
                 int cant = Integer.valueOf(cantidad);
 
                 HibernateUtil.beginTx(session);
-                Tratamiento t = tatDAO.modificar(session, tratamiento, nombre, cantidad, precioUnitario);
-                modeloTablaTratamiento.updateTratamiento(filaSeleccionada, t);
+                Tratamiento tratamientoExistente = tatDAO.existeTratamientoConMismoNombreYPrecio(session, nombre, precio);
+                if (tratamientoExistente != null) {
+                    JOptionPane.showMessageDialog(null, "Ya existe un tratamiento con ese nombre y precio.", "Error", JOptionPane.ERROR_MESSAGE);
+                    HibernateUtil.rollbackTx(session);
+                    return;
+                }
+
+                Tratamiento nuevoTratamiento = new Tratamiento(nombre, cant, precio);
+                tatDAO.insertar(session, nuevoTratamiento);
+                modeloTablaTratamiento.addTratamiento(nuevoTratamiento);
                 HibernateUtil.commitTx(session);
+                cargarComboTratamientos();
+                limpiarFormulario();
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "El formato de cantidad o precio unitario es incorrecto. Asegúrese de ingresar números válidos.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+                HibernateUtil.rollbackTx(session);
             } catch (Exception ex) {
                 session.getTransaction().rollback();
                 Logger.getLogger(VinedoController.class.getName()).log(Level.SEVERE, null, ex);
@@ -138,13 +112,40 @@ public static void actualizarTratamiento(Tratamiento tratamiento, int filaSelecc
         } else {
             JOptionPane.showMessageDialog(null, "Debe introducir todos los campos", "Mensaje", JOptionPane.WARNING_MESSAGE);
         }
-    } catch (Exception ex) {
-        Logger.getLogger(VinedoController.class.getName()).log(Level.SEVERE, null, ex);
     }
-}
 
-      
-       public static void eliminarTratamiento(Tratamiento tratamiento, int filaSeleccionada) {
+    public static void actualizarTratamiento(Tratamiento tratamiento, int filaSeleccionada) {
+        try {
+            String nombre = ventana.getTxtNombre().getText();
+            String cantidad = ventana.getTxtCantidad().getText();
+            String precioUnitario = ventana.getTxtPrecioUni().getText();
+
+            if (!nombre.isEmpty() || !cantidad.isEmpty() || !precioUnitario.isEmpty()) {
+                try {
+                   
+
+                    HibernateUtil.beginTx(session);
+                    Tratamiento t = tatDAO.modificar(session, tratamiento, nombre, cantidad, precioUnitario);
+                    modeloTablaTratamiento.updateTratamiento(filaSeleccionada, t);
+                    HibernateUtil.commitTx(session);
+                     cargarComboTratamientos();
+                     getAllTratamientobyVinedo();
+                    limpiarFormulario(); 
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "El formato de cantidad o precio unitario es incorrecto. Asegúrese de ingresar números válidos.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    session.getTransaction().rollback();
+                    Logger.getLogger(VinedoController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Debe introducir al menos un campo", "Mensaje", JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(VinedoController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void eliminarTratamiento(Tratamiento tratamiento, int filaSeleccionada) {
         int confirmacion = JOptionPane.showConfirmDialog(
             null,
             "¿Está seguro de que quiere borrar? Borrar un tratamiento supondrá el borrado de este tratamiento de todos los viñedos asociados.",
@@ -160,6 +161,9 @@ public static void actualizarTratamiento(Tratamiento tratamiento, int filaSelecc
                     modeloTablaTratamiento.removeTratamiento(filaSeleccionada);
                 }
                 HibernateUtil.commitTx(session);
+                  cargarComboTratamientos();
+                  getAllTratamientobyVinedo();
+                limpiarFormulario(); // Limpiar el formulario después de eliminar
             } catch (Exception ex) {
                 session.getTransaction().rollback();
                 Logger.getLogger(TratamientoController.class.getName()).log(Level.SEVERE, null, ex);
@@ -168,31 +172,30 @@ public static void actualizarTratamiento(Tratamiento tratamiento, int filaSelecc
             // Salir del método sin borrar nada
             return;
         }
-    }  
-     public static void insertarTratamientoVinedo(){
-          
-       Vinedo vin =(Vinedo) ventana.getComboVinedo().getSelectedItem();
-       Tratamiento t =(Tratamiento) ventana.getComboTratamiento().getSelectedItem();
-        
-       if (vin != null && t != null) {
-            try { 
+    }
+
+    public static void insertarTratamientoVinedo() {
+        Vinedo vin = (Vinedo) ventana.getComboVinedo().getSelectedItem();
+        Tratamiento t = (Tratamiento) ventana.getComboTratamiento().getSelectedItem();
+
+        if (vin != null && t != null) {
+            try {
                 HibernateUtil.beginTx(session);
-                VinedoTratamiento nuevoTratamiento = new VinedoTratamiento (vin,t);
+                VinedoTratamiento nuevoTratamiento = new VinedoTratamiento(vin, t);
                 vintatDAO.insertar(session, nuevoTratamiento);
                 modeloTablaVinedoTratamiento.addVinedoTratamiento(nuevoTratamiento);
                 HibernateUtil.commitTx(session);
+                limpiarFormulario(); // Limpiar el formulario después de insertar
             } catch (Exception ex) {
                 session.getTransaction().rollback();
                 Logger.getLogger(VinedoController.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         } else {
             JOptionPane.showMessageDialog(null, "Debe introducir todos los campos", "Mensaje", JOptionPane.WARNING_MESSAGE);
         }
-     
-     }
-     
-      public static void eliminarTratamientoVinedo(VinedoTratamiento vt, int filaSeleccionada) {
+    }
+
+    public static void eliminarTratamientoVinedo(VinedoTratamiento vt, int filaSeleccionada) {
         try {
             HibernateUtil.beginTx(session);
             if (vt != null) {
@@ -200,23 +203,22 @@ public static void actualizarTratamiento(Tratamiento tratamiento, int filaSelecc
                 modeloTablaVinedoTratamiento.removeVinedoTratamiento(filaSeleccionada);
             }
             HibernateUtil.commitTx(session);
+            limpiarFormulario(); 
         } catch (Exception ex) {
             session.getTransaction().rollback();
             Logger.getLogger(VinedoController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-       public static void getAllTratamientobyVinedo() {
-          List<VinedoTratamiento> vinedotrat = null;
-         try {
-            HibernateUtil.beginTx(session);
-             Vinedo vin =(Vinedo) ventana.getComboVinedo().getSelectedItem();
-         
-            if (vin != null) {
-            
-             vinedotrat = vintatDAO.getTratamientosByVinedo(session,vin.getId());
-             
 
-              modeloTablaVinedoTratamiento = new VinedoTratamientoTableModel(vinedotrat);
+    public static void getAllTratamientobyVinedo() {
+        List<VinedoTratamiento> vinedotrat = null;
+        try {
+            HibernateUtil.beginTx(session);
+            Vinedo vin = (Vinedo) ventana.getComboVinedo().getSelectedItem();
+
+            if (vin != null) {
+                vinedotrat = vintatDAO.getTratamientosByVinedo(session, vin.getId());
+                modeloTablaVinedoTratamiento = new VinedoTratamientoTableModel(vinedotrat);
                 ventana.getVinedoTratamientoTable().setModel(modeloTablaVinedoTratamiento);
             }
             HibernateUtil.commitTx(session);
@@ -224,7 +226,28 @@ public static void actualizarTratamiento(Tratamiento tratamiento, int filaSelecc
             session.getTransaction().rollback();
             Logger.getLogger(NotaController.class.getName()).log(Level.SEVERE, null, ex);
         }
-  
-      
-}
+    }
+
+    public static void limpiarFormulario() {
+        ventana.getComboVinedo().setSelectedItem(null);
+        ventana.getComboTratamiento().setSelectedItem(null);
+        ventana.getTxtNombre().setText("");
+        ventana.getTxtCantidad().setText("");
+        ventana.getTxtPrecioUni().setText("");
+    }
+
+
+    public static void cargarTratamientoEnFormulario(Tratamiento tratamiento) {
+        ventana.getTxtNombre().setText(tratamiento.getNombre());
+        ventana.getTxtCantidad().setText(String.valueOf(tratamiento.getCantidad()));
+        ventana.getTxtPrecioUni().setText(String.valueOf(tratamiento.getPrecioUnitario()));
+    }
+
+    // Método para actualizar datos
+    public static void actualizarDatos() {
+        cargarComboVinedos();
+        cargarComboTratamientos();
+        modeloTablaTratamiento.actualizarDatos(tatDAO.getAllTratamientos(session));
+        getAllTratamientobyVinedo();
+    }
 }

@@ -51,21 +51,42 @@ class RegisterActivity : AppCompatActivity(), UserRegisterCallback {
 
         // Configura el listener para el botón de registro
         btnRegistro.setOnClickListener {
+            val errorMessage = StringBuilder()
+
             // Verifica si algún campo está vacío o no cumple con las validaciones
-            if (!comprobarVacio(editTexts) || !isValidEmail(email.text.toString()) || !containsOnlyLetters(nombre.text.toString()) || !containsOnlyLetters(apellidos.text.toString()) || !isValidPassword(contrasena.text.toString())) {
+            if (nombre.text.toString().isEmpty()) {
+                errorMessage.append("Nombre no puede estar vacío\n")
+            }
+            if (apellidos.text.toString().isEmpty()) {
+                errorMessage.append("Apellidos no pueden estar vacíos\n")
+            }
+            if (!isValidEmail(email.text.toString())) {
+                errorMessage.append("Correo electrónico no válido\n")
+            }
+            if (!containsOnlyLetters(nombre.text.toString())) {
+                errorMessage.append("Nombre solo puede contener letras\n")
+            }
+            if (!containsOnlyLetters(apellidos.text.toString())) {
+                errorMessage.append("Apellidos solo pueden contener letras\n")
+            }
+            if (!isValidPassword(contrasena.text.toString())) {
+                errorMessage.append("Contraseña debe tener máximo 16 caracteres\n")
+            }
+
+            // Si hay errores, muestra un Toast con los mensajes de error
+            if (errorMessage.isNotEmpty()) {
+                Toast.makeText(this, errorMessage.toString().trim(), Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
 
-            // Crea un objeto Usuario con los datos ingresados por el usuario
+            // Si no hay errores, procede con el registro
             val usuario = Usuario(
                 nombre.text.toString().trim(),
                 apellidos.text.toString().trim(),
                 email.text.toString().trim(),
                 contrasena.text.toString().trim(),
-                ImageHelper.encodeImageViewToBase64(fotoPerfil) // Codifica la imagen del perfil a Base64
+                ImageHelper.encodeImageViewToBase64(fotoPerfil)
             )
-
-            // Envía la solicitud de registro del usuario al repositorio
             UsuarioRepository.registrarUsuario(this, usuario, this)
         }
     }

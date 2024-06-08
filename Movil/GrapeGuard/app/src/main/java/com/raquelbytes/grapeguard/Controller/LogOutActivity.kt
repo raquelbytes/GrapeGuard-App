@@ -21,6 +21,7 @@ import com.raquelbytes.grapeguard.API.Model.Usuario
 import com.raquelbytes.grapeguard.API.Repository.UsuarioRepository
 import com.raquelbytes.grapeguard.R
 import com.raquelbytes.grapeguard.SQLite.UsuarioDAO
+import com.raquelbytes.grapeguard.SQLite.UsuarioDbHelper
 import com.raquelbytes.grapeguard.Util.ImageHelper
 import com.raquelbytes.grapeguard.Util.LocaleUtil
 
@@ -36,6 +37,7 @@ class LogOutActivity : AppCompatActivity(), UserUpdateCallback {
     private lateinit var contrasena: EditText
     private lateinit var fotoPerfil: ImageView
     private lateinit var usuarioActual: Usuario
+    private lateinit var dbHelper: UsuarioDbHelper
     private var fotoUsuario: Bitmap? = null
 
     private val MY_CAMERA_PERMISSION_CODE = 100
@@ -68,6 +70,7 @@ class LogOutActivity : AppCompatActivity(), UserUpdateCallback {
                 // Cuando se obtiene el usuario correctamente, actualiza el objeto usuarioActual y muestra los datos del usuario
                 usuarioActual = usuario
                 mostrarDatosUsuario()
+
             }
 
             override fun onUserUpdateFailed(error: String) {
@@ -192,7 +195,7 @@ class LogOutActivity : AppCompatActivity(), UserUpdateCallback {
         usuarioActual.contrasena = contrasenaActualizada
         usuarioActual.foto = fotoActualizada
 
-
+        // Guarda los nuevos datos en la base de datos SQLite
 
 
         // Envia los datos actualizados al servidor
@@ -268,11 +271,13 @@ class LogOutActivity : AppCompatActivity(), UserUpdateCallback {
 
     override fun onUserUpdateSuccess(response: String) {
         // Maneja el caso en el que la actualización del usuario tiene éxito
+        actualizarUsuarioEnSQLite()
         Toast.makeText(
             this,
             getString(R.string.toast_usuario_actualizado_exitoso),
             Toast.LENGTH_LONG
         ).show()
+        recreate()
         finish()
     }
 
@@ -292,6 +297,14 @@ class LogOutActivity : AppCompatActivity(), UserUpdateCallback {
         val intent = Intent(this, StartActivity::class.java)
         startActivity(intent)
         finish()
+    }
+    private fun actualizarUsuarioEnSQLite() {
+        // Actualiza el usuario en la base de datos local
+        dbHelper = UsuarioDbHelper(this)
+        val db = dbHelper.writableDatabase
+        val usuarioDAO = UsuarioDAO(this)
+        val usuarioSQLite = com.raquelbytes.grapeguard.SQLite.Usuario(usuarioActual)
+        usuarioDAO.actualizarUsuario(usuarioSQLite)
     }
 
 }

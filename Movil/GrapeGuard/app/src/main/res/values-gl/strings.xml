@@ -37,7 +37,7 @@
     <string name="button_register">Rexistrarse</string>
     <string name="welcome_message">Benvido a GrapeGuard</string>
     <string name="login_using">Iniciar sesión con:</string>
-    <string name="tagline">Cultiva a excelencia</string>
+    <string name="tagline">Xestiona os teus viñedos, cultiva a excelencia</string>
 
     <string name="login_title">Inicia Sesión</string>
     <string name="email_label">Email:</string>
@@ -85,6 +85,7 @@
     <string name="toast_bienvenido_grapeguard">¡Benvenido a GrapeGuard!</string>
     <string name="toast_usuario_contraseña_incorrectos">Usuario o contrasinal incorrectos</string>
     <string name="toast_error_inesperado">Error Inesperado</string>
+    <string name="toast_invalid_vinedo">Xa existe ese viñedo nesa ubicación.</string>
 
     <string name="toast_foto_no_capturada">Foto non capturada</string>
     <string name="toast_permiso_camara_denegado">Permiso de cámara denegado</string>
@@ -103,6 +104,8 @@
     <string name="notification_content">É hora de: </string>
 
     <string name="logout_title">Modificar Usuario </string>
+    <string name="vineyard">Viñedo</string>
+    <string name="vineyards">Viñedos</string>
 
 
 

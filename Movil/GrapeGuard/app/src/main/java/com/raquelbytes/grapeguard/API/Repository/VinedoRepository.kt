@@ -1,7 +1,9 @@
 package com.raquelbytes.grapeguard.API.Repository
 
 import android.content.Context
+import android.provider.Settings.Global.getString
 import android.util.Log
+import android.widget.Toast
 import com.android.volley.AuthFailureError
 import com.android.volley.NetworkResponse
 import com.android.volley.Request
@@ -16,6 +18,7 @@ import com.raquelbytes.grapeguard.API.Interface.VinedoCallback
 import com.raquelbytes.grapeguard.API.Interface.VinedoObtenidoCallback
 import com.raquelbytes.grapeguard.API.Interface.VinedosCallback
 import com.raquelbytes.grapeguard.API.Model.Vinedo
+import com.raquelbytes.grapeguard.R
 import com.raquelbytes.grapeguard.Util.ApiMap
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
@@ -75,6 +78,8 @@ class VinedoRepository {
                     if (error.networkResponse != null && error.networkResponse.data != null) {
                         errorMessage = String(error.networkResponse.data, StandardCharsets.UTF_8)
                     }
+
+
                     callback.onVinedoError(errorMessage)
                 }) {
                 override fun getBody(): ByteArray {

@@ -1,5 +1,6 @@
 package com.raquelbytes.grapeguard.Controller
 
+import AddHarvestDialogFragment
 import TareaAdapter
 import android.content.Intent
 import android.os.Bundle
@@ -127,7 +128,7 @@ class VinedoActivity : AppCompatActivity(), AddTaskDialogFragment.AddTaskDialogL
                 val addHarvestButton: Button = findViewById(R.id.add_harvest_button)
                 addHarvestButton.setOnClickListener {
                         val dialog = AddHarvestDialogFragment()
-                        dialog.setAddHarvestDialogListener(this) // Si es necesario
+                        dialog.setAddHarvestDialogListener(this)
                         dialog.show(supportFragmentManager, "AddHarvestDialogFragment")
                 }
 
@@ -207,7 +208,7 @@ class VinedoActivity : AppCompatActivity(), AddTaskDialogFragment.AddTaskDialogL
                 dialog.show()
         }
 
-         fun actualizarListaTareas() {
+        fun actualizarListaTareas() {
                 val vinedo: Vinedo? = intent.getSerializableExtra("vinedo") as? Vinedo
                 val tareaListView: ListView = findViewById(R.id.list_view_tasks)
                 if (vinedo != null) {
@@ -216,14 +217,24 @@ class VinedoActivity : AppCompatActivity(), AddTaskDialogFragment.AddTaskDialogL
                                 override fun onTareasObtenidas(tareas: List<Tarea>) {
                                         val tareaAdapter = TareaAdapter(this@VinedoActivity, R.layout.item_tarea, tareas)
                                         tareaListView.adapter = tareaAdapter
+
+                                        // Si la lista de tareas está vacía, limpiar la lista
+                                        if (tareas.isEmpty()) {
+                                                tareaAdapter.clear()
+                                                tareaAdapter.notifyDataSetChanged()
+                                        }
                                 }
 
                                 override fun onError(errorMessage: String) {
+                                        // Si se produce un error al obtener las tareas, mostrar un mensaje de error pero limpiar la lista
                                         Log.e("Tareas Error", errorMessage)
+                                        val tareaAdapter = TareaAdapter(this@VinedoActivity, R.layout.item_tarea, emptyList())
+                                        tareaListView.adapter = tareaAdapter
                                 }
                         })
                 }
         }
+
         fun actualizarListaCosechas() {
                 val vinedo: Vinedo? = intent.getSerializableExtra("vinedo") as? Vinedo
                 val tableLayout: TableLayout = findViewById(R.id.tableLayout)
@@ -275,7 +286,7 @@ class VinedoActivity : AppCompatActivity(), AddTaskDialogFragment.AddTaskDialogL
         private fun getFotoUsuario(id: Int): String? {
                 val usuarioDAO = UsuarioDAO(this)
                 val usuario = usuarioDAO.obtenerUsuario(id)
-                Log.e("usuario", usuario.toString()) // Agregamos un log para ver el valor de usuario
+                Log.e("usuario", usuario.toString())
 
                 return usuario?.foto
         }

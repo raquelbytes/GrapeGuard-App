@@ -70,10 +70,10 @@ public class NotaDAO {
     }
 
     public Nota modificar(Session session, Nota n, Vinedo vinedo,String notaTexto, Nota.PrioridadNota prioridad) {
-        if(notaTexto != "" && !notaTexto.isEmpty() && notaTexto.isBlank()){
+        if(notaTexto != "" && !notaTexto.isEmpty() && !notaTexto.isBlank()){
         n.setNota(notaTexto);}
-        n.setVinedo(vinedo);
-        n.setPrioridad(prioridad);
+        if(vinedo != null){n.setVinedo(vinedo);}
+        if(prioridad != null){n.setPrioridad(prioridad);}
         session.update(n);
         return n;
     }

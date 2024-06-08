@@ -14,4 +14,10 @@ class Usuario {
         this.apellido = apellido
         this.foto = foto
     }
+    constructor(usuarioAPI: com.raquelbytes.grapeguard.API.Model.Usuario) {
+        this.id = usuarioAPI.id_usuario
+        this.nombre = usuarioAPI.nombre
+        this.apellido = usuarioAPI.apellido
+        this.foto = usuarioAPI.foto
+    }
 }

@@ -146,6 +146,7 @@ public class Vinedo implements Serializable {
     public void setTratamientos(List<VinedoTratamiento> tratamientos) {
         this.tratamientos = tratamientos;
     }
+   
 
    
     

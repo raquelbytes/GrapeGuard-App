@@ -71,7 +71,7 @@ public class Tratamiento implements Serializable {
 
     @Override
     public String toString() {
-        return  nombre + " " + precioUnitario;
+        return  nombre + " (" + precioUnitario + " €)";
     }
 
   

@@ -3,11 +3,13 @@ package Util;
 import modelo.vo.Vinedo;
 
 import javax.swing.table.AbstractTableModel;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class VinedoTableModel extends AbstractTableModel {
     private final List<Vinedo> vinedos;
     private final String[] columnNames = {"ID", "Nombre", "Ubicación", "Fecha de Plantación", "Hectáreas"};
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
     public VinedoTableModel(List<Vinedo> vinedos) {
         this.vinedos = vinedos;
@@ -34,7 +36,7 @@ public class VinedoTableModel extends AbstractTableModel {
             case 2:
                 return vinedo.getUbicacion();
             case 3:
-                return vinedo.getFechaPlantacion();
+                return dateFormat.format(vinedo.getFechaPlantacion());
             case 4:
                 return vinedo.getHectareas();
             default:
@@ -68,13 +70,15 @@ public class VinedoTableModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
-    public Vinedo getVinedoAt(int rowIndex) {
-        if (rowIndex >= 0 && rowIndex < vinedos.size()) {
-            return vinedos.get(rowIndex);
-        } else {
-            return null;
-        }
+   public Vinedo getVinedoAt(int rowIndex) {
+    if (rowIndex >= 0 && rowIndex < vinedos.size()) {
+        return vinedos.get(rowIndex);
+     
+    } else {
+        return null;
     }
+}
+
 
     public void limpiar() {
         vinedos.clear();
